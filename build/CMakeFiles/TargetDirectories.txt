@@ -1,5 +1,0 @@
-C:/Users/HAns/Documents/devel/fei30-master/build/CMakeFiles/stm32l432-blink.dir
-C:/Users/HAns/Documents/devel/fei30-master/build/CMakeFiles/stm32l432-blink_size.dir
-C:/Users/HAns/Documents/devel/fei30-master/build/CMakeFiles/flash.dir
-C:/Users/HAns/Documents/devel/fei30-master/build/CMakeFiles/edit_cache.dir
-C:/Users/HAns/Documents/devel/fei30-master/build/CMakeFiles/rebuild_cache.dir
