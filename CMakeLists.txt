@@ -8,19 +8,19 @@ set(CMAKE_EXECUTABLE_SUFFIX ".elf")
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_ASM_FLAGS "${CMAKE_ASM_FLAGS} -x assembler-with-cpp")
 
-set(STM32CUBE_L4_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/extern/STM32CubeL4 CACHE PATH "Path to STM32CubeL4")
+set(STM32_HAL_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/extern/stm32_hal CACHE PATH "Path to STM32 HAL")
 set(LINKER_SCRIPT ${CMAKE_CURRENT_SOURCE_DIR}/linker/STM32L432KCUx_FLASH.ld CACHE FILEPATH "Linker script")
 
-if(NOT EXISTS ${STM32CUBE_L4_ROOT})
-    message(FATAL_ERROR "STM32CubeL4 repository not found. Did you clone submodules?")
+if(NOT EXISTS ${STM32_HAL_ROOT})
+    message(FATAL_ERROR "STM32 HAL directory not found at ${STM32_HAL_ROOT}")
 endif()
 
-set(HAL_DRIVER_DIR ${STM32CUBE_L4_ROOT}/Drivers/STM32L4xx_HAL_Driver)
-set(CMSIS_DEVICE_DIR ${STM32CUBE_L4_ROOT}/Drivers/CMSIS/Device/ST/STM32L4xx)
-set(CMSIS_CORE_DIR ${STM32CUBE_L4_ROOT}/Drivers/CMSIS/Include)
+set(HAL_DRIVER_DIR ${STM32_HAL_ROOT}/Drivers/STM32L4xx_HAL_Driver)
+set(CMSIS_DEVICE_DIR ${STM32_HAL_ROOT}/Drivers/CMSIS/Device/ST/STM32L4xx)
+set(CMSIS_CORE_DIR ${STM32_HAL_ROOT}/Drivers/CMSIS/Include)
 
 if(NOT EXISTS ${HAL_DRIVER_DIR}/Inc/stm32l4xx_hal.h OR NOT EXISTS ${CMSIS_DEVICE_DIR}/Include/stm32l432xx.h)
-    message(FATAL_ERROR "Required HAL/CMSIS submodules are missing. Run 'git submodule update --init --depth 1 extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver extern/STM32CubeL4/Drivers/CMSIS/Device/ST/STM32L4xx'")
+    message(FATAL_ERROR "Required HAL/CMSIS files are missing in ${STM32_HAL_ROOT}")
 endif()
 
 set(HAL_SOURCES
