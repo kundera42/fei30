@@ -10,7 +10,14 @@
       "Bash(arm-none-eabi-strings:*)",
       "Bash(git init:*)",
       "Bash(git remote add:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git ls-tree:*)",
+      "Bash(cmake:*)",
+      "Bash(ninja:*)",
+      "Bash(ls:*)",
+      "Bash(git reset:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)"
     ],
     "deny": [],
     "ask": []

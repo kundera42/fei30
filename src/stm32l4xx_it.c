@@ -166,6 +166,33 @@ void USART1_IRQHandler(void)
   HAL_UART_IRQHandler(&huart1);
 }
 
+/**
+  * @brief This function handles USART2 global interrupt.
+  */
+void USART2_IRQHandler(void)
+{
+  extern UART_HandleTypeDef huart2;
+  HAL_UART_IRQHandler(&huart2);
+}
+
+/**
+  * @brief This function handles DMA1 channel5 global interrupt (USART1 RX).
+  */
+void DMA1_Channel5_IRQHandler(void)
+{
+  extern DMA_HandleTypeDef hdma_usart1_rx;
+  HAL_DMA_IRQHandler(&hdma_usart1_rx);
+}
+
+/**
+  * @brief This function handles DMA1 channel7 global interrupt (USART2 TX).
+  */
+void DMA1_Channel7_IRQHandler(void)
+{
+  extern DMA_HandleTypeDef hdma_usart2_tx;
+  HAL_DMA_IRQHandler(&hdma_usart2_tx);
+}
+
 
 /**
   * @}

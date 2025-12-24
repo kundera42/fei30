@@ -54,7 +54,7 @@ build CMakeFiles/stm32l432-blink.dir/src/main.c.obj: C_COMPILER__stm32l432-blink
   DEFINES = -DSTM32L432xx -DUSE_HAL_DRIVER
   DEP_FILE = CMakeFiles\stm32l432-blink.dir\src\main.c.obj.d
   FLAGS = -g -std=c11 -mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard -ffunction-sections -fdata-sections -Wall -Wextra -Wundef -Wshadow -O3 -g3
-  INCLUDES = -IC:/Users/HAns/Documents/devel/fei30-master/config -IC:/Users/HAns/Documents/devel/fei30-master/src -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Inc -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/CMSIS/Device/ST/STM32L4xx/Include -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/CMSIS/Include
+  INCLUDES = -IC:/Users/HAns/Documents/devel/fei30-master/config -IC:/Users/HAns/Documents/devel/fei30-master/src -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Inc -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/CMSIS/Device/ST/STM32L4xx/Include -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/CMSIS/Include
   OBJECT_DIR = CMakeFiles\stm32l432-blink.dir
   OBJECT_FILE_DIR = CMakeFiles\stm32l432-blink.dir\src
 
@@ -63,7 +63,7 @@ build CMakeFiles/stm32l432-blink.dir/src/stm32l4xx_it.c.obj: C_COMPILER__stm32l4
   DEFINES = -DSTM32L432xx -DUSE_HAL_DRIVER
   DEP_FILE = CMakeFiles\stm32l432-blink.dir\src\stm32l4xx_it.c.obj.d
   FLAGS = -g -std=c11 -mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard -ffunction-sections -fdata-sections -Wall -Wextra -Wundef -Wshadow -O3 -g3
-  INCLUDES = -IC:/Users/HAns/Documents/devel/fei30-master/config -IC:/Users/HAns/Documents/devel/fei30-master/src -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Inc -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/CMSIS/Device/ST/STM32L4xx/Include -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/CMSIS/Include
+  INCLUDES = -IC:/Users/HAns/Documents/devel/fei30-master/config -IC:/Users/HAns/Documents/devel/fei30-master/src -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Inc -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/CMSIS/Device/ST/STM32L4xx/Include -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/CMSIS/Include
   OBJECT_DIR = CMakeFiles\stm32l432-blink.dir
   OBJECT_FILE_DIR = CMakeFiles\stm32l432-blink.dir\src
 
@@ -72,7 +72,7 @@ build CMakeFiles/stm32l432-blink.dir/src/system_stm32l4xx.c.obj: C_COMPILER__stm
   DEFINES = -DSTM32L432xx -DUSE_HAL_DRIVER
   DEP_FILE = CMakeFiles\stm32l432-blink.dir\src\system_stm32l4xx.c.obj.d
   FLAGS = -g -std=c11 -mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard -ffunction-sections -fdata-sections -Wall -Wextra -Wundef -Wshadow -O3 -g3
-  INCLUDES = -IC:/Users/HAns/Documents/devel/fei30-master/config -IC:/Users/HAns/Documents/devel/fei30-master/src -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Inc -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/CMSIS/Device/ST/STM32L4xx/Include -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/CMSIS/Include
+  INCLUDES = -IC:/Users/HAns/Documents/devel/fei30-master/config -IC:/Users/HAns/Documents/devel/fei30-master/src -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Inc -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/CMSIS/Device/ST/STM32L4xx/Include -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/CMSIS/Include
   OBJECT_DIR = CMakeFiles\stm32l432-blink.dir
   OBJECT_FILE_DIR = CMakeFiles\stm32l432-blink.dir\src
 
@@ -81,135 +81,135 @@ build CMakeFiles/stm32l432-blink.dir/startup/startup_stm32l432xx.s.obj: ASM_COMP
   DEFINES = -DSTM32L432xx -DUSE_HAL_DRIVER
   DEP_FILE = CMakeFiles\stm32l432-blink.dir\startup\startup_stm32l432xx.s.obj.d
   FLAGS = -x assembler-with-cpp -g -mcpu=cortex-m4 -mthumb
-  INCLUDES = -IC:/Users/HAns/Documents/devel/fei30-master/config -IC:/Users/HAns/Documents/devel/fei30-master/src -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Inc -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/CMSIS/Device/ST/STM32L4xx/Include -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/CMSIS/Include
+  INCLUDES = -IC:/Users/HAns/Documents/devel/fei30-master/config -IC:/Users/HAns/Documents/devel/fei30-master/src -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Inc -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/CMSIS/Device/ST/STM32L4xx/Include -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/CMSIS/Include
   OBJECT_DIR = CMakeFiles\stm32l432-blink.dir
   OBJECT_FILE_DIR = CMakeFiles\stm32l432-blink.dir\startup
 
-build CMakeFiles/stm32l432-blink.dir/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal.c.obj: C_COMPILER__stm32l432-blink_unscanned_Debug C$:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal.c || cmake_object_order_depends_target_stm32l432-blink
+build CMakeFiles/stm32l432-blink.dir/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal.c.obj: C_COMPILER__stm32l432-blink_unscanned_Debug C$:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal.c || cmake_object_order_depends_target_stm32l432-blink
   CONFIG = Debug
   DEFINES = -DSTM32L432xx -DUSE_HAL_DRIVER
-  DEP_FILE = CMakeFiles\stm32l432-blink.dir\extern\STM32CubeL4\Drivers\STM32L4xx_HAL_Driver\Src\stm32l4xx_hal.c.obj.d
+  DEP_FILE = CMakeFiles\stm32l432-blink.dir\extern\stm32_hal\Drivers\STM32L4xx_HAL_Driver\Src\stm32l4xx_hal.c.obj.d
   FLAGS = -g -std=c11 -mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard -ffunction-sections -fdata-sections -Wall -Wextra -Wundef -Wshadow -O3 -g3
-  INCLUDES = -IC:/Users/HAns/Documents/devel/fei30-master/config -IC:/Users/HAns/Documents/devel/fei30-master/src -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Inc -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/CMSIS/Device/ST/STM32L4xx/Include -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/CMSIS/Include
+  INCLUDES = -IC:/Users/HAns/Documents/devel/fei30-master/config -IC:/Users/HAns/Documents/devel/fei30-master/src -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Inc -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/CMSIS/Device/ST/STM32L4xx/Include -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/CMSIS/Include
   OBJECT_DIR = CMakeFiles\stm32l432-blink.dir
-  OBJECT_FILE_DIR = CMakeFiles\stm32l432-blink.dir\extern\STM32CubeL4\Drivers\STM32L4xx_HAL_Driver\Src
+  OBJECT_FILE_DIR = CMakeFiles\stm32l432-blink.dir\extern\stm32_hal\Drivers\STM32L4xx_HAL_Driver\Src
 
-build CMakeFiles/stm32l432-blink.dir/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_cortex.c.obj: C_COMPILER__stm32l432-blink_unscanned_Debug C$:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_cortex.c || cmake_object_order_depends_target_stm32l432-blink
+build CMakeFiles/stm32l432-blink.dir/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_cortex.c.obj: C_COMPILER__stm32l432-blink_unscanned_Debug C$:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_cortex.c || cmake_object_order_depends_target_stm32l432-blink
   CONFIG = Debug
   DEFINES = -DSTM32L432xx -DUSE_HAL_DRIVER
-  DEP_FILE = CMakeFiles\stm32l432-blink.dir\extern\STM32CubeL4\Drivers\STM32L4xx_HAL_Driver\Src\stm32l4xx_hal_cortex.c.obj.d
+  DEP_FILE = CMakeFiles\stm32l432-blink.dir\extern\stm32_hal\Drivers\STM32L4xx_HAL_Driver\Src\stm32l4xx_hal_cortex.c.obj.d
   FLAGS = -g -std=c11 -mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard -ffunction-sections -fdata-sections -Wall -Wextra -Wundef -Wshadow -O3 -g3
-  INCLUDES = -IC:/Users/HAns/Documents/devel/fei30-master/config -IC:/Users/HAns/Documents/devel/fei30-master/src -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Inc -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/CMSIS/Device/ST/STM32L4xx/Include -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/CMSIS/Include
+  INCLUDES = -IC:/Users/HAns/Documents/devel/fei30-master/config -IC:/Users/HAns/Documents/devel/fei30-master/src -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Inc -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/CMSIS/Device/ST/STM32L4xx/Include -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/CMSIS/Include
   OBJECT_DIR = CMakeFiles\stm32l432-blink.dir
-  OBJECT_FILE_DIR = CMakeFiles\stm32l432-blink.dir\extern\STM32CubeL4\Drivers\STM32L4xx_HAL_Driver\Src
+  OBJECT_FILE_DIR = CMakeFiles\stm32l432-blink.dir\extern\stm32_hal\Drivers\STM32L4xx_HAL_Driver\Src
 
-build CMakeFiles/stm32l432-blink.dir/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_rcc.c.obj: C_COMPILER__stm32l432-blink_unscanned_Debug C$:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_rcc.c || cmake_object_order_depends_target_stm32l432-blink
+build CMakeFiles/stm32l432-blink.dir/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_rcc.c.obj: C_COMPILER__stm32l432-blink_unscanned_Debug C$:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_rcc.c || cmake_object_order_depends_target_stm32l432-blink
   CONFIG = Debug
   DEFINES = -DSTM32L432xx -DUSE_HAL_DRIVER
-  DEP_FILE = CMakeFiles\stm32l432-blink.dir\extern\STM32CubeL4\Drivers\STM32L4xx_HAL_Driver\Src\stm32l4xx_hal_rcc.c.obj.d
+  DEP_FILE = CMakeFiles\stm32l432-blink.dir\extern\stm32_hal\Drivers\STM32L4xx_HAL_Driver\Src\stm32l4xx_hal_rcc.c.obj.d
   FLAGS = -g -std=c11 -mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard -ffunction-sections -fdata-sections -Wall -Wextra -Wundef -Wshadow -O3 -g3
-  INCLUDES = -IC:/Users/HAns/Documents/devel/fei30-master/config -IC:/Users/HAns/Documents/devel/fei30-master/src -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Inc -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/CMSIS/Device/ST/STM32L4xx/Include -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/CMSIS/Include
+  INCLUDES = -IC:/Users/HAns/Documents/devel/fei30-master/config -IC:/Users/HAns/Documents/devel/fei30-master/src -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Inc -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/CMSIS/Device/ST/STM32L4xx/Include -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/CMSIS/Include
   OBJECT_DIR = CMakeFiles\stm32l432-blink.dir
-  OBJECT_FILE_DIR = CMakeFiles\stm32l432-blink.dir\extern\STM32CubeL4\Drivers\STM32L4xx_HAL_Driver\Src
+  OBJECT_FILE_DIR = CMakeFiles\stm32l432-blink.dir\extern\stm32_hal\Drivers\STM32L4xx_HAL_Driver\Src
 
-build CMakeFiles/stm32l432-blink.dir/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_rcc_ex.c.obj: C_COMPILER__stm32l432-blink_unscanned_Debug C$:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_rcc_ex.c || cmake_object_order_depends_target_stm32l432-blink
+build CMakeFiles/stm32l432-blink.dir/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_rcc_ex.c.obj: C_COMPILER__stm32l432-blink_unscanned_Debug C$:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_rcc_ex.c || cmake_object_order_depends_target_stm32l432-blink
   CONFIG = Debug
   DEFINES = -DSTM32L432xx -DUSE_HAL_DRIVER
-  DEP_FILE = CMakeFiles\stm32l432-blink.dir\extern\STM32CubeL4\Drivers\STM32L4xx_HAL_Driver\Src\stm32l4xx_hal_rcc_ex.c.obj.d
+  DEP_FILE = CMakeFiles\stm32l432-blink.dir\extern\stm32_hal\Drivers\STM32L4xx_HAL_Driver\Src\stm32l4xx_hal_rcc_ex.c.obj.d
   FLAGS = -g -std=c11 -mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard -ffunction-sections -fdata-sections -Wall -Wextra -Wundef -Wshadow -O3 -g3
-  INCLUDES = -IC:/Users/HAns/Documents/devel/fei30-master/config -IC:/Users/HAns/Documents/devel/fei30-master/src -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Inc -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/CMSIS/Device/ST/STM32L4xx/Include -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/CMSIS/Include
+  INCLUDES = -IC:/Users/HAns/Documents/devel/fei30-master/config -IC:/Users/HAns/Documents/devel/fei30-master/src -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Inc -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/CMSIS/Device/ST/STM32L4xx/Include -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/CMSIS/Include
   OBJECT_DIR = CMakeFiles\stm32l432-blink.dir
-  OBJECT_FILE_DIR = CMakeFiles\stm32l432-blink.dir\extern\STM32CubeL4\Drivers\STM32L4xx_HAL_Driver\Src
+  OBJECT_FILE_DIR = CMakeFiles\stm32l432-blink.dir\extern\stm32_hal\Drivers\STM32L4xx_HAL_Driver\Src
 
-build CMakeFiles/stm32l432-blink.dir/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash.c.obj: C_COMPILER__stm32l432-blink_unscanned_Debug C$:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash.c || cmake_object_order_depends_target_stm32l432-blink
+build CMakeFiles/stm32l432-blink.dir/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash.c.obj: C_COMPILER__stm32l432-blink_unscanned_Debug C$:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash.c || cmake_object_order_depends_target_stm32l432-blink
   CONFIG = Debug
   DEFINES = -DSTM32L432xx -DUSE_HAL_DRIVER
-  DEP_FILE = CMakeFiles\stm32l432-blink.dir\extern\STM32CubeL4\Drivers\STM32L4xx_HAL_Driver\Src\stm32l4xx_hal_flash.c.obj.d
+  DEP_FILE = CMakeFiles\stm32l432-blink.dir\extern\stm32_hal\Drivers\STM32L4xx_HAL_Driver\Src\stm32l4xx_hal_flash.c.obj.d
   FLAGS = -g -std=c11 -mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard -ffunction-sections -fdata-sections -Wall -Wextra -Wundef -Wshadow -O3 -g3
-  INCLUDES = -IC:/Users/HAns/Documents/devel/fei30-master/config -IC:/Users/HAns/Documents/devel/fei30-master/src -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Inc -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/CMSIS/Device/ST/STM32L4xx/Include -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/CMSIS/Include
+  INCLUDES = -IC:/Users/HAns/Documents/devel/fei30-master/config -IC:/Users/HAns/Documents/devel/fei30-master/src -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Inc -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/CMSIS/Device/ST/STM32L4xx/Include -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/CMSIS/Include
   OBJECT_DIR = CMakeFiles\stm32l432-blink.dir
-  OBJECT_FILE_DIR = CMakeFiles\stm32l432-blink.dir\extern\STM32CubeL4\Drivers\STM32L4xx_HAL_Driver\Src
+  OBJECT_FILE_DIR = CMakeFiles\stm32l432-blink.dir\extern\stm32_hal\Drivers\STM32L4xx_HAL_Driver\Src
 
-build CMakeFiles/stm32l432-blink.dir/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ex.c.obj: C_COMPILER__stm32l432-blink_unscanned_Debug C$:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ex.c || cmake_object_order_depends_target_stm32l432-blink
+build CMakeFiles/stm32l432-blink.dir/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ex.c.obj: C_COMPILER__stm32l432-blink_unscanned_Debug C$:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ex.c || cmake_object_order_depends_target_stm32l432-blink
   CONFIG = Debug
   DEFINES = -DSTM32L432xx -DUSE_HAL_DRIVER
-  DEP_FILE = CMakeFiles\stm32l432-blink.dir\extern\STM32CubeL4\Drivers\STM32L4xx_HAL_Driver\Src\stm32l4xx_hal_flash_ex.c.obj.d
+  DEP_FILE = CMakeFiles\stm32l432-blink.dir\extern\stm32_hal\Drivers\STM32L4xx_HAL_Driver\Src\stm32l4xx_hal_flash_ex.c.obj.d
   FLAGS = -g -std=c11 -mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard -ffunction-sections -fdata-sections -Wall -Wextra -Wundef -Wshadow -O3 -g3
-  INCLUDES = -IC:/Users/HAns/Documents/devel/fei30-master/config -IC:/Users/HAns/Documents/devel/fei30-master/src -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Inc -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/CMSIS/Device/ST/STM32L4xx/Include -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/CMSIS/Include
+  INCLUDES = -IC:/Users/HAns/Documents/devel/fei30-master/config -IC:/Users/HAns/Documents/devel/fei30-master/src -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Inc -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/CMSIS/Device/ST/STM32L4xx/Include -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/CMSIS/Include
   OBJECT_DIR = CMakeFiles\stm32l432-blink.dir
-  OBJECT_FILE_DIR = CMakeFiles\stm32l432-blink.dir\extern\STM32CubeL4\Drivers\STM32L4xx_HAL_Driver\Src
+  OBJECT_FILE_DIR = CMakeFiles\stm32l432-blink.dir\extern\stm32_hal\Drivers\STM32L4xx_HAL_Driver\Src
 
-build CMakeFiles/stm32l432-blink.dir/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c.obj: C_COMPILER__stm32l432-blink_unscanned_Debug C$:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c || cmake_object_order_depends_target_stm32l432-blink
+build CMakeFiles/stm32l432-blink.dir/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c.obj: C_COMPILER__stm32l432-blink_unscanned_Debug C$:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c || cmake_object_order_depends_target_stm32l432-blink
   CONFIG = Debug
   DEFINES = -DSTM32L432xx -DUSE_HAL_DRIVER
-  DEP_FILE = CMakeFiles\stm32l432-blink.dir\extern\STM32CubeL4\Drivers\STM32L4xx_HAL_Driver\Src\stm32l4xx_hal_flash_ramfunc.c.obj.d
+  DEP_FILE = CMakeFiles\stm32l432-blink.dir\extern\stm32_hal\Drivers\STM32L4xx_HAL_Driver\Src\stm32l4xx_hal_flash_ramfunc.c.obj.d
   FLAGS = -g -std=c11 -mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard -ffunction-sections -fdata-sections -Wall -Wextra -Wundef -Wshadow -O3 -g3
-  INCLUDES = -IC:/Users/HAns/Documents/devel/fei30-master/config -IC:/Users/HAns/Documents/devel/fei30-master/src -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Inc -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/CMSIS/Device/ST/STM32L4xx/Include -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/CMSIS/Include
+  INCLUDES = -IC:/Users/HAns/Documents/devel/fei30-master/config -IC:/Users/HAns/Documents/devel/fei30-master/src -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Inc -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/CMSIS/Device/ST/STM32L4xx/Include -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/CMSIS/Include
   OBJECT_DIR = CMakeFiles\stm32l432-blink.dir
-  OBJECT_FILE_DIR = CMakeFiles\stm32l432-blink.dir\extern\STM32CubeL4\Drivers\STM32L4xx_HAL_Driver\Src
+  OBJECT_FILE_DIR = CMakeFiles\stm32l432-blink.dir\extern\stm32_hal\Drivers\STM32L4xx_HAL_Driver\Src
 
-build CMakeFiles/stm32l432-blink.dir/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_pwr.c.obj: C_COMPILER__stm32l432-blink_unscanned_Debug C$:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_pwr.c || cmake_object_order_depends_target_stm32l432-blink
+build CMakeFiles/stm32l432-blink.dir/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_pwr.c.obj: C_COMPILER__stm32l432-blink_unscanned_Debug C$:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_pwr.c || cmake_object_order_depends_target_stm32l432-blink
   CONFIG = Debug
   DEFINES = -DSTM32L432xx -DUSE_HAL_DRIVER
-  DEP_FILE = CMakeFiles\stm32l432-blink.dir\extern\STM32CubeL4\Drivers\STM32L4xx_HAL_Driver\Src\stm32l4xx_hal_pwr.c.obj.d
+  DEP_FILE = CMakeFiles\stm32l432-blink.dir\extern\stm32_hal\Drivers\STM32L4xx_HAL_Driver\Src\stm32l4xx_hal_pwr.c.obj.d
   FLAGS = -g -std=c11 -mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard -ffunction-sections -fdata-sections -Wall -Wextra -Wundef -Wshadow -O3 -g3
-  INCLUDES = -IC:/Users/HAns/Documents/devel/fei30-master/config -IC:/Users/HAns/Documents/devel/fei30-master/src -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Inc -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/CMSIS/Device/ST/STM32L4xx/Include -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/CMSIS/Include
+  INCLUDES = -IC:/Users/HAns/Documents/devel/fei30-master/config -IC:/Users/HAns/Documents/devel/fei30-master/src -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Inc -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/CMSIS/Device/ST/STM32L4xx/Include -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/CMSIS/Include
   OBJECT_DIR = CMakeFiles\stm32l432-blink.dir
-  OBJECT_FILE_DIR = CMakeFiles\stm32l432-blink.dir\extern\STM32CubeL4\Drivers\STM32L4xx_HAL_Driver\Src
+  OBJECT_FILE_DIR = CMakeFiles\stm32l432-blink.dir\extern\stm32_hal\Drivers\STM32L4xx_HAL_Driver\Src
 
-build CMakeFiles/stm32l432-blink.dir/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_pwr_ex.c.obj: C_COMPILER__stm32l432-blink_unscanned_Debug C$:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_pwr_ex.c || cmake_object_order_depends_target_stm32l432-blink
+build CMakeFiles/stm32l432-blink.dir/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_pwr_ex.c.obj: C_COMPILER__stm32l432-blink_unscanned_Debug C$:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_pwr_ex.c || cmake_object_order_depends_target_stm32l432-blink
   CONFIG = Debug
   DEFINES = -DSTM32L432xx -DUSE_HAL_DRIVER
-  DEP_FILE = CMakeFiles\stm32l432-blink.dir\extern\STM32CubeL4\Drivers\STM32L4xx_HAL_Driver\Src\stm32l4xx_hal_pwr_ex.c.obj.d
+  DEP_FILE = CMakeFiles\stm32l432-blink.dir\extern\stm32_hal\Drivers\STM32L4xx_HAL_Driver\Src\stm32l4xx_hal_pwr_ex.c.obj.d
   FLAGS = -g -std=c11 -mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard -ffunction-sections -fdata-sections -Wall -Wextra -Wundef -Wshadow -O3 -g3
-  INCLUDES = -IC:/Users/HAns/Documents/devel/fei30-master/config -IC:/Users/HAns/Documents/devel/fei30-master/src -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Inc -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/CMSIS/Device/ST/STM32L4xx/Include -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/CMSIS/Include
+  INCLUDES = -IC:/Users/HAns/Documents/devel/fei30-master/config -IC:/Users/HAns/Documents/devel/fei30-master/src -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Inc -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/CMSIS/Device/ST/STM32L4xx/Include -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/CMSIS/Include
   OBJECT_DIR = CMakeFiles\stm32l432-blink.dir
-  OBJECT_FILE_DIR = CMakeFiles\stm32l432-blink.dir\extern\STM32CubeL4\Drivers\STM32L4xx_HAL_Driver\Src
+  OBJECT_FILE_DIR = CMakeFiles\stm32l432-blink.dir\extern\stm32_hal\Drivers\STM32L4xx_HAL_Driver\Src
 
-build CMakeFiles/stm32l432-blink.dir/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_gpio.c.obj: C_COMPILER__stm32l432-blink_unscanned_Debug C$:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_gpio.c || cmake_object_order_depends_target_stm32l432-blink
+build CMakeFiles/stm32l432-blink.dir/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_gpio.c.obj: C_COMPILER__stm32l432-blink_unscanned_Debug C$:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_gpio.c || cmake_object_order_depends_target_stm32l432-blink
   CONFIG = Debug
   DEFINES = -DSTM32L432xx -DUSE_HAL_DRIVER
-  DEP_FILE = CMakeFiles\stm32l432-blink.dir\extern\STM32CubeL4\Drivers\STM32L4xx_HAL_Driver\Src\stm32l4xx_hal_gpio.c.obj.d
+  DEP_FILE = CMakeFiles\stm32l432-blink.dir\extern\stm32_hal\Drivers\STM32L4xx_HAL_Driver\Src\stm32l4xx_hal_gpio.c.obj.d
   FLAGS = -g -std=c11 -mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard -ffunction-sections -fdata-sections -Wall -Wextra -Wundef -Wshadow -O3 -g3
-  INCLUDES = -IC:/Users/HAns/Documents/devel/fei30-master/config -IC:/Users/HAns/Documents/devel/fei30-master/src -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Inc -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/CMSIS/Device/ST/STM32L4xx/Include -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/CMSIS/Include
+  INCLUDES = -IC:/Users/HAns/Documents/devel/fei30-master/config -IC:/Users/HAns/Documents/devel/fei30-master/src -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Inc -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/CMSIS/Device/ST/STM32L4xx/Include -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/CMSIS/Include
   OBJECT_DIR = CMakeFiles\stm32l432-blink.dir
-  OBJECT_FILE_DIR = CMakeFiles\stm32l432-blink.dir\extern\STM32CubeL4\Drivers\STM32L4xx_HAL_Driver\Src
+  OBJECT_FILE_DIR = CMakeFiles\stm32l432-blink.dir\extern\stm32_hal\Drivers\STM32L4xx_HAL_Driver\Src
 
-build CMakeFiles/stm32l432-blink.dir/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart.c.obj: C_COMPILER__stm32l432-blink_unscanned_Debug C$:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart.c || cmake_object_order_depends_target_stm32l432-blink
+build CMakeFiles/stm32l432-blink.dir/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart.c.obj: C_COMPILER__stm32l432-blink_unscanned_Debug C$:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart.c || cmake_object_order_depends_target_stm32l432-blink
   CONFIG = Debug
   DEFINES = -DSTM32L432xx -DUSE_HAL_DRIVER
-  DEP_FILE = CMakeFiles\stm32l432-blink.dir\extern\STM32CubeL4\Drivers\STM32L4xx_HAL_Driver\Src\stm32l4xx_hal_uart.c.obj.d
+  DEP_FILE = CMakeFiles\stm32l432-blink.dir\extern\stm32_hal\Drivers\STM32L4xx_HAL_Driver\Src\stm32l4xx_hal_uart.c.obj.d
   FLAGS = -g -std=c11 -mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard -ffunction-sections -fdata-sections -Wall -Wextra -Wundef -Wshadow -O3 -g3
-  INCLUDES = -IC:/Users/HAns/Documents/devel/fei30-master/config -IC:/Users/HAns/Documents/devel/fei30-master/src -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Inc -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/CMSIS/Device/ST/STM32L4xx/Include -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/CMSIS/Include
+  INCLUDES = -IC:/Users/HAns/Documents/devel/fei30-master/config -IC:/Users/HAns/Documents/devel/fei30-master/src -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Inc -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/CMSIS/Device/ST/STM32L4xx/Include -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/CMSIS/Include
   OBJECT_DIR = CMakeFiles\stm32l432-blink.dir
-  OBJECT_FILE_DIR = CMakeFiles\stm32l432-blink.dir\extern\STM32CubeL4\Drivers\STM32L4xx_HAL_Driver\Src
+  OBJECT_FILE_DIR = CMakeFiles\stm32l432-blink.dir\extern\stm32_hal\Drivers\STM32L4xx_HAL_Driver\Src
 
-build CMakeFiles/stm32l432-blink.dir/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c.obj: C_COMPILER__stm32l432-blink_unscanned_Debug C$:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c || cmake_object_order_depends_target_stm32l432-blink
+build CMakeFiles/stm32l432-blink.dir/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c.obj: C_COMPILER__stm32l432-blink_unscanned_Debug C$:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c || cmake_object_order_depends_target_stm32l432-blink
   CONFIG = Debug
   DEFINES = -DSTM32L432xx -DUSE_HAL_DRIVER
-  DEP_FILE = CMakeFiles\stm32l432-blink.dir\extern\STM32CubeL4\Drivers\STM32L4xx_HAL_Driver\Src\stm32l4xx_hal_uart_ex.c.obj.d
+  DEP_FILE = CMakeFiles\stm32l432-blink.dir\extern\stm32_hal\Drivers\STM32L4xx_HAL_Driver\Src\stm32l4xx_hal_uart_ex.c.obj.d
   FLAGS = -g -std=c11 -mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard -ffunction-sections -fdata-sections -Wall -Wextra -Wundef -Wshadow -O3 -g3
-  INCLUDES = -IC:/Users/HAns/Documents/devel/fei30-master/config -IC:/Users/HAns/Documents/devel/fei30-master/src -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Inc -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/CMSIS/Device/ST/STM32L4xx/Include -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/CMSIS/Include
+  INCLUDES = -IC:/Users/HAns/Documents/devel/fei30-master/config -IC:/Users/HAns/Documents/devel/fei30-master/src -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Inc -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/CMSIS/Device/ST/STM32L4xx/Include -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/CMSIS/Include
   OBJECT_DIR = CMakeFiles\stm32l432-blink.dir
-  OBJECT_FILE_DIR = CMakeFiles\stm32l432-blink.dir\extern\STM32CubeL4\Drivers\STM32L4xx_HAL_Driver\Src
+  OBJECT_FILE_DIR = CMakeFiles\stm32l432-blink.dir\extern\stm32_hal\Drivers\STM32L4xx_HAL_Driver\Src
 
-build CMakeFiles/stm32l432-blink.dir/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_dma.c.obj: C_COMPILER__stm32l432-blink_unscanned_Debug C$:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_dma.c || cmake_object_order_depends_target_stm32l432-blink
+build CMakeFiles/stm32l432-blink.dir/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_dma.c.obj: C_COMPILER__stm32l432-blink_unscanned_Debug C$:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_dma.c || cmake_object_order_depends_target_stm32l432-blink
   CONFIG = Debug
   DEFINES = -DSTM32L432xx -DUSE_HAL_DRIVER
-  DEP_FILE = CMakeFiles\stm32l432-blink.dir\extern\STM32CubeL4\Drivers\STM32L4xx_HAL_Driver\Src\stm32l4xx_hal_dma.c.obj.d
+  DEP_FILE = CMakeFiles\stm32l432-blink.dir\extern\stm32_hal\Drivers\STM32L4xx_HAL_Driver\Src\stm32l4xx_hal_dma.c.obj.d
   FLAGS = -g -std=c11 -mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard -ffunction-sections -fdata-sections -Wall -Wextra -Wundef -Wshadow -O3 -g3
-  INCLUDES = -IC:/Users/HAns/Documents/devel/fei30-master/config -IC:/Users/HAns/Documents/devel/fei30-master/src -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Inc -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/CMSIS/Device/ST/STM32L4xx/Include -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/CMSIS/Include
+  INCLUDES = -IC:/Users/HAns/Documents/devel/fei30-master/config -IC:/Users/HAns/Documents/devel/fei30-master/src -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Inc -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/CMSIS/Device/ST/STM32L4xx/Include -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/CMSIS/Include
   OBJECT_DIR = CMakeFiles\stm32l432-blink.dir
-  OBJECT_FILE_DIR = CMakeFiles\stm32l432-blink.dir\extern\STM32CubeL4\Drivers\STM32L4xx_HAL_Driver\Src
+  OBJECT_FILE_DIR = CMakeFiles\stm32l432-blink.dir\extern\stm32_hal\Drivers\STM32L4xx_HAL_Driver\Src
 
-build CMakeFiles/stm32l432-blink.dir/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_dma_ex.c.obj: C_COMPILER__stm32l432-blink_unscanned_Debug C$:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_dma_ex.c || cmake_object_order_depends_target_stm32l432-blink
+build CMakeFiles/stm32l432-blink.dir/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_dma_ex.c.obj: C_COMPILER__stm32l432-blink_unscanned_Debug C$:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_dma_ex.c || cmake_object_order_depends_target_stm32l432-blink
   CONFIG = Debug
   DEFINES = -DSTM32L432xx -DUSE_HAL_DRIVER
-  DEP_FILE = CMakeFiles\stm32l432-blink.dir\extern\STM32CubeL4\Drivers\STM32L4xx_HAL_Driver\Src\stm32l4xx_hal_dma_ex.c.obj.d
+  DEP_FILE = CMakeFiles\stm32l432-blink.dir\extern\stm32_hal\Drivers\STM32L4xx_HAL_Driver\Src\stm32l4xx_hal_dma_ex.c.obj.d
   FLAGS = -g -std=c11 -mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard -ffunction-sections -fdata-sections -Wall -Wextra -Wundef -Wshadow -O3 -g3
-  INCLUDES = -IC:/Users/HAns/Documents/devel/fei30-master/config -IC:/Users/HAns/Documents/devel/fei30-master/src -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Inc -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/CMSIS/Device/ST/STM32L4xx/Include -IC:/Users/HAns/Documents/devel/fei30-master/extern/STM32CubeL4/Drivers/CMSIS/Include
+  INCLUDES = -IC:/Users/HAns/Documents/devel/fei30-master/config -IC:/Users/HAns/Documents/devel/fei30-master/src -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Inc -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/CMSIS/Device/ST/STM32L4xx/Include -IC:/Users/HAns/Documents/devel/fei30-master/extern/stm32_hal/Drivers/CMSIS/Include
   OBJECT_DIR = CMakeFiles\stm32l432-blink.dir
-  OBJECT_FILE_DIR = CMakeFiles\stm32l432-blink.dir\extern\STM32CubeL4\Drivers\STM32L4xx_HAL_Driver\Src
+  OBJECT_FILE_DIR = CMakeFiles\stm32l432-blink.dir\extern\stm32_hal\Drivers\STM32L4xx_HAL_Driver\Src
 
 
 # =============================================================================
@@ -219,7 +219,7 @@ build CMakeFiles/stm32l432-blink.dir/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Dr
 #############################################
 # Link the executable stm32l432-blink.elf
 
-build stm32l432-blink.elf: C_EXECUTABLE_LINKER__stm32l432-blink_Debug CMakeFiles/stm32l432-blink.dir/src/main.c.obj CMakeFiles/stm32l432-blink.dir/src/stm32l4xx_it.c.obj CMakeFiles/stm32l432-blink.dir/src/system_stm32l4xx.c.obj CMakeFiles/stm32l432-blink.dir/startup/startup_stm32l432xx.s.obj CMakeFiles/stm32l432-blink.dir/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal.c.obj CMakeFiles/stm32l432-blink.dir/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_cortex.c.obj CMakeFiles/stm32l432-blink.dir/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_rcc.c.obj CMakeFiles/stm32l432-blink.dir/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_rcc_ex.c.obj CMakeFiles/stm32l432-blink.dir/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash.c.obj CMakeFiles/stm32l432-blink.dir/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ex.c.obj CMakeFiles/stm32l432-blink.dir/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c.obj CMakeFiles/stm32l432-blink.dir/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_pwr.c.obj CMakeFiles/stm32l432-blink.dir/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_pwr_ex.c.obj CMakeFiles/stm32l432-blink.dir/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_gpio.c.obj CMakeFiles/stm32l432-blink.dir/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart.c.obj CMakeFiles/stm32l432-blink.dir/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c.obj CMakeFiles/stm32l432-blink.dir/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_dma.c.obj CMakeFiles/stm32l432-blink.dir/extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_dma_ex.c.obj
+build stm32l432-blink.elf: C_EXECUTABLE_LINKER__stm32l432-blink_Debug CMakeFiles/stm32l432-blink.dir/src/main.c.obj CMakeFiles/stm32l432-blink.dir/src/stm32l4xx_it.c.obj CMakeFiles/stm32l432-blink.dir/src/system_stm32l4xx.c.obj CMakeFiles/stm32l432-blink.dir/startup/startup_stm32l432xx.s.obj CMakeFiles/stm32l432-blink.dir/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal.c.obj CMakeFiles/stm32l432-blink.dir/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_cortex.c.obj CMakeFiles/stm32l432-blink.dir/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_rcc.c.obj CMakeFiles/stm32l432-blink.dir/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_rcc_ex.c.obj CMakeFiles/stm32l432-blink.dir/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash.c.obj CMakeFiles/stm32l432-blink.dir/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ex.c.obj CMakeFiles/stm32l432-blink.dir/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c.obj CMakeFiles/stm32l432-blink.dir/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_pwr.c.obj CMakeFiles/stm32l432-blink.dir/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_pwr_ex.c.obj CMakeFiles/stm32l432-blink.dir/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_gpio.c.obj CMakeFiles/stm32l432-blink.dir/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart.c.obj CMakeFiles/stm32l432-blink.dir/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c.obj CMakeFiles/stm32l432-blink.dir/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_dma.c.obj CMakeFiles/stm32l432-blink.dir/extern/stm32_hal/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_dma_ex.c.obj
   CONFIG = Debug
   FLAGS = -g
   LINK_FLAGS = -TC:/Users/HAns/Documents/devel/fei30-master/linker/STM32L432KCUx_FLASH.ld -mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard -Wl,-Map=C:/Users/HAns/Documents/devel/fei30-master/build/stm32l432-blink.map -Wl,--gc-sections -Wl,--start-group -lc -lm -lnosys -Wl,--end-group

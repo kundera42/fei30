@@ -1,7 +1,10 @@
 #include "stm32l4xx_hal.h"
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 #include "spi_bitbang_master.h"
+
+#define M_PI 3.14159265358979323846
 
 #define LED_GPIO_PORT GPIOA
 #define LED_PIN       GPIO_PIN_5
@@ -11,6 +14,8 @@
 
 UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
+DMA_HandleTypeDef hdma_usart1_rx;
+DMA_HandleTypeDef hdma_usart2_tx;
 
 typedef struct {
     uint32_t epoch;
@@ -24,9 +29,10 @@ typedef struct {
 } EspTime;
 
 static volatile EspTime esp_time;
-static uint8_t esp_rx_byte;
 static char esp_rx_line[ESP_RX_BUF_LEN];
-static size_t esp_rx_len;
+static volatile uint8_t uart_rx_busy = 0;
+static char echo_buffer[ESP_RX_BUF_LEN + 1];  // +1 for newline
+static volatile uint8_t echo_busy = 0;
 
 int testcounter = 0;
 
@@ -145,6 +151,7 @@ static const uint8_t colon_off[6][1] = {
 
 static void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
+static void MX_DMA_Init(void);
 static void MX_USART1_UART_Init(void);
 static void MX_USART2_UART_Init(void);
 static void start_uart_rx(void);
@@ -152,6 +159,8 @@ static void process_line(const char *line);
 static int has_type_time(const char *line);
 static int parse_int_field(const char *line, const char *key, int *out);
 static void echo_line_usart2(const char *line);
+static void draw_line(int8_t x0, int8_t y0, int8_t x1, int8_t y1, uint8_t character);
+static void draw_clock_hands(uint8_t hour, uint8_t minute);
 void Error_Handler(void);
 
 int main(void)
@@ -159,6 +168,7 @@ int main(void)
     HAL_Init();
     SystemClock_Config();
     MX_GPIO_Init();
+    MX_DMA_Init();
     MX_USART1_UART_Init();
     MX_USART2_UART_Init();
     start_uart_rx();
@@ -166,6 +176,10 @@ int main(void)
     static int i, j;
     static int8_t posx, posy;
     static uint32_t blink_counter = 0;
+    static float circle_angle = 0.0f;
+    static uint32_t anim_counter = 0;
+    static uint8_t sim_hour = 2;
+    static uint8_t sim_minute = 10;
 
     while (1)
     {
@@ -173,104 +187,121 @@ int main(void)
         uint8_t hour = esp_time.valid ? esp_time.hour : 0;
         uint8_t minute = esp_time.valid ? esp_time.minute : 0;
 
+        // Animate clock hands for testing
+        anim_counter++;
+        if (anim_counter >= 20) {  // Update every ~50 frames
+            anim_counter = 0;
+            sim_minute++;
+            if (sim_minute >= 60) {
+                sim_minute = 0;
+                sim_hour++;
+                if (sim_hour >= 12) {
+                    sim_hour = 0;
+                }
+            }
+        }
+
         // Calculate individual digits
         uint8_t hour_tens = (hour / 10);
         uint8_t hour_ones = (hour % 10) + 1;
         uint8_t min_tens = minute / 10;
         uint8_t min_ones = minute % 10;
 
-        // Display HH:MM format
-        // First digit (hour tens) - starting at position -80
-        posx = -80;
-        for (j = 0; j < 3; j++) {
-            posy = 40;
-            for (i = 0; i < 6; i++) {
-                bitbang_character(digit_patterns[hour_tens][i][j], posy, posx);
-                posy -= 10;
+        // // Display HH:MM format
+        // // First digit (hour tens) - starting at position -80
+        // posx = -80;
+        // for (j = 0; j < 3; j++) {
+        //     posy = 40;
+        //     for (i = 0; i < 6; i++) {
+        //         bitbang_character(digit_patterns[hour_tens][i][j], posy, posx);
+        //         posy -= 10;
+        //     }
+        //     posx += 10;
+        // }
+
+        // // Second digit (hour ones) - starting at position -40
+        // posx = -40;
+        // for (j = 0; j < 3; j++) {
+        //     posy = 40;
+        //     for (i = 0; i < 6; i++) {
+        //         bitbang_character(digit_patterns[hour_ones][i][j], posy, posx);
+        //         posy -= 10;
+        //     }
+        //     posx += 10;
+        // }
+
+        // // Colon separator - blinking at position 5
+        // posx = 5;
+        // const uint8_t (*colon_pattern)[1] = (blink_counter < 50) ? colon_on : colon_off;
+        // posy = 40;
+        // for (i = 0; i < 6; i++) {
+        //     bitbang_character(colon_pattern[i][0], posy, posx);
+        //     posy -= 10;
+        // }
+
+        // // Third digit (minute tens) - starting at position 27
+        // posx = 27;
+        // for (j = 0; j < 3; j++) {
+        //     posy = 40;
+        //     for (i = 0; i < 6; i++) {
+        //         bitbang_character(digit_patterns[min_tens][i][j], posy, posx);
+        //         posy -= 10;
+        //     }
+        //     posx += 10;
+        // }
+
+        // // Fourth digit (minute ones) - starting at position 67
+        // posx = 67;
+        // for (j = 0; j < 3; j++) {
+        //     posy = 40;
+        //     for (i = 0; i < 6; i++) {
+        //         bitbang_character(digit_patterns[min_ones][i][j], posy, posx);
+        //         posy -= 10;
+        //     }
+        //     posx += 10;
+        // }
+
+        // Draw hour markers (1-12) at clock positions
+        const float hour_radius = 100.0f;
+        for (int hour = 1; hour <= 12; hour++) {
+            // Calculate angle for this hour (12 o'clock = top = 90°, clockwise)
+            // angle = 90° - (hour * 30°) for standard clock positions
+            float hour_angle = (M_PI / 2.0f) - ((hour % 12) * M_PI / 6.0f);
+
+            int8_t hour_x = (int8_t)(hour_radius * cosf(hour_angle));
+            int8_t hour_y = (int8_t)(hour_radius * sinf(hour_angle));
+
+            // Display digit: 0x31='1', 0x32='2', etc. For 10-12, just use first digit
+            uint8_t digit_char;
+            if (hour < 10) {
+                digit_char = 0x30 + hour;  // '1' through '9'
+            } else if (hour == 10) {
+                digit_char = 0x31;  // '1' for position 10
+            } else if (hour == 11) {
+                digit_char = 0x31;  // '1' for position 11
+            } else {
+                digit_char = 0x31;  // '1' for position 12
             }
-            posx += 10;
+
+            bitbang_character(digit_char, hour_y, hour_x);
         }
 
-        // Second digit (hour ones) - starting at position -40
-        posx = -40;
-        for (j = 0; j < 3; j++) {
-            posy = 40;
-            for (i = 0; i < 6; i++) {
-                bitbang_character(digit_patterns[hour_ones][i][j], posy, posx);
-                posy -= 10;
-            }
-            posx += 10;
-        }
+        // Draw clock hands using pixel character 0xD5 (animated for testing)
+        draw_clock_hands(sim_hour, sim_minute);
 
-        // Colon separator - blinking at position 5
-        posx = 5;
-        const uint8_t (*colon_pattern)[1] = (blink_counter < 50) ? colon_on : colon_off;
-        posy = 40;
-        for (i = 0; i < 6; i++) {
-            bitbang_character(colon_pattern[i][0], posy, posx);
-            posy -= 10;
-        }
+        bitbang_character(0xE2, 0,0);
+        // Circular motion - character moves in a circle around the display
+        // const float orbit_radius = 60.0f;
+        // int8_t circle_x = (int8_t)(orbit_radius * cosf(circle_angle));
+        // int8_t circle_y = (int8_t)(orbit_radius * sinf(circle_angle));
 
-        // Third digit (minute tens) - starting at position 27
-        posx = 27;
-        for (j = 0; j < 3; j++) {
-            posy = 40;
-            for (i = 0; i < 6; i++) {
-                bitbang_character(digit_patterns[min_tens][i][j], posy, posx);
-                posy -= 10;
-            }
-            posx += 10;
-        }
+        // bitbang_character(0xE2, circle_y, circle_x);
 
-        // Fourth digit (minute ones) - starting at position 67
-        posx = 67;
-        for (j = 0; j < 3; j++) {
-            posy = 40;
-            for (i = 0; i < 6; i++) {
-                bitbang_character(digit_patterns[min_ones][i][j], posy, posx);
-                posy -= 10;
-            }
-            posx += 10;
-        }
-
-        // Subtext - two lines of characters
-        bitbang_character(0x48, -30, -80);
-        bitbang_character(0x48, -30, -70);
-        bitbang_character(0x48, -30, -60);
-        bitbang_character(0x48, -30, -50);
-        bitbang_character(0x48, -30, -40);
-        bitbang_character(0x48, -30, -30);
-        bitbang_character(0x48, -30, -20);
-        bitbang_character(0x48, -30, -10);
-        bitbang_character(0x48, -30,   0);
-        bitbang_character(0x48, -30,  10);
-        bitbang_character(0x48, -30,  20);
-        bitbang_character(0x48, -30,  30);
-        bitbang_character(0x48, -30,  40);
-        bitbang_character(0x48, -30,  50);
-        bitbang_character(0x48, -30,  60);
-        bitbang_character(0x48, -30,  70);
-        bitbang_character(0x48, -30,  80);
-        bitbang_character(0x48, -30,  90);
-
-        bitbang_character(0x48, -50, -80);
-        bitbang_character(0x48, -50, -70);
-        bitbang_character(0x48, -50, -60);
-        bitbang_character(0x48, -50, -50);
-        bitbang_character(0x48, -50, -40);
-        bitbang_character(0x48, -50, -30);
-        bitbang_character(0x48, -50, -20);
-        bitbang_character(0x48, -50, -10);
-        bitbang_character(0x48, -50,   0);
-        bitbang_character(0x48, -50,  10);
-        bitbang_character(0x48, -50,  20);
-        bitbang_character(0x48, -50,  30);
-        bitbang_character(0x48, -50,  40);
-        bitbang_character(0x48, -50,  50);
-        bitbang_character(0x48, -50,  60);
-        bitbang_character(0x48, -50,  70);
-        bitbang_character(0x48, -50,  80);
-        bitbang_character(0x48, -50,  90);
+        // Update angle - increment by PI/1000 per frame for ~2 second rotation
+        // circle_angle -= (M_PI / 10.0f);
+        // if (circle_angle <= (2.0f * M_PI)) {
+        //     circle_angle += (2.0f * M_PI);
+        // }
 
         // Blink counter for colon
         blink_counter++;
@@ -279,7 +310,7 @@ int main(void)
         }
 
         // Small delay for performance tuning
-        HAL_Delay(5);
+        // HAL_Delay(1);
     }
 }
 
@@ -300,6 +331,53 @@ static void MX_GPIO_Init(void)
     gpio.Pull = GPIO_NOPULL;
     gpio.Speed = GPIO_SPEED_FREQ_HIGH;
     HAL_GPIO_Init(GPIOA, &gpio);
+}
+
+static void MX_DMA_Init(void)
+{
+    // Enable DMA1 clock
+    __HAL_RCC_DMA1_CLK_ENABLE();
+
+    // Configure DMA for USART1 RX (DMA1 Channel 5)
+    hdma_usart1_rx.Instance = DMA1_Channel5;
+    hdma_usart1_rx.Init.Request = DMA_REQUEST_2;  // USART1_RX
+    hdma_usart1_rx.Init.Direction = DMA_PERIPH_TO_MEMORY;
+    hdma_usart1_rx.Init.PeriphInc = DMA_PINC_DISABLE;
+    hdma_usart1_rx.Init.MemInc = DMA_MINC_ENABLE;
+    hdma_usart1_rx.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
+    hdma_usart1_rx.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
+    hdma_usart1_rx.Init.Mode = DMA_NORMAL;
+    hdma_usart1_rx.Init.Priority = DMA_PRIORITY_LOW;
+
+    if (HAL_DMA_Init(&hdma_usart1_rx) != HAL_OK) {
+        Error_Handler();
+    }
+
+    // Disable half-transfer interrupt (only want complete transfer + idle)
+    __HAL_DMA_DISABLE_IT(&hdma_usart1_rx, DMA_IT_HT);
+
+    // DMA interrupt priority
+    HAL_NVIC_SetPriority(DMA1_Channel5_IRQn, 5, 0);
+    HAL_NVIC_EnableIRQ(DMA1_Channel5_IRQn);
+
+    // Configure DMA for USART2 TX (DMA1 Channel 7)
+    hdma_usart2_tx.Instance = DMA1_Channel7;
+    hdma_usart2_tx.Init.Request = DMA_REQUEST_2;  // USART2_TX
+    hdma_usart2_tx.Init.Direction = DMA_MEMORY_TO_PERIPH;
+    hdma_usart2_tx.Init.PeriphInc = DMA_PINC_DISABLE;
+    hdma_usart2_tx.Init.MemInc = DMA_MINC_ENABLE;
+    hdma_usart2_tx.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
+    hdma_usart2_tx.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
+    hdma_usart2_tx.Init.Mode = DMA_NORMAL;
+    hdma_usart2_tx.Init.Priority = DMA_PRIORITY_LOW;
+
+    if (HAL_DMA_Init(&hdma_usart2_tx) != HAL_OK) {
+        Error_Handler();
+    }
+
+    // DMA interrupt priority
+    HAL_NVIC_SetPriority(DMA1_Channel7_IRQn, 6, 0);
+    HAL_NVIC_EnableIRQ(DMA1_Channel7_IRQn);
 }
 
 static void MX_USART1_UART_Init(void)
@@ -323,8 +401,13 @@ static void MX_USART1_UART_Init(void)
     huart1.Init.Mode = UART_MODE_TX_RX;
     huart1.Init.HwFlowCtl = UART_HWCONTROL_NONE;
     huart1.Init.OverSampling = UART_OVERSAMPLING_16;
+
+    // Link DMA handle to UART
+    __HAL_LINKDMA(&huart1, hdmarx, hdma_usart1_rx);
+
     HAL_UART_Init(&huart1);
 
+    // Enable USART1 interrupt for DMA callbacks
     HAL_NVIC_SetPriority(USART1_IRQn, 5, 0);
     HAL_NVIC_EnableIRQ(USART1_IRQn);
 }
@@ -350,14 +433,23 @@ static void MX_USART2_UART_Init(void)
     huart2.Init.Mode = UART_MODE_TX_RX;
     huart2.Init.HwFlowCtl = UART_HWCONTROL_NONE;
     huart2.Init.OverSampling = UART_OVERSAMPLING_16;
+
+    // Link DMA handle to UART2 TX
+    __HAL_LINKDMA(&huart2, hdmatx, hdma_usart2_tx);
+
     HAL_UART_Init(&huart2);
+
+    // Enable USART2 interrupt for DMA callbacks
+    HAL_NVIC_SetPriority(USART2_IRQn, 6, 0);
+    HAL_NVIC_EnableIRQ(USART2_IRQn);
 }
 
 static void start_uart_rx(void)
 {
-    HAL_StatusTypeDef status = HAL_UART_Receive_IT(&huart1, &esp_rx_byte, 1);
+    // Use DMA with idle line detection - receives until line goes idle (message complete)
+    HAL_StatusTypeDef status = HAL_UARTEx_ReceiveToIdle_DMA(&huart1, (uint8_t *)esp_rx_line, ESP_RX_BUF_LEN);
     if (status != HAL_OK) {
-        // Flash error - toggle PA8 rapidly if RX setup fails
+        // Flash error 
         Error_Handler();
     }
 }
@@ -365,15 +457,28 @@ static void start_uart_rx(void)
 static int parse_int_field(const char *line, const char *key, int *out)
 {
     const char *p = strstr(line, key);
-    if (!p) return 0;
+    
+    if (!p) 
+        return 0;
+    
     p = strchr(p, ':');
-    if (!p) return 0;
+    
+    if (!p) 
+        return 0;
+    
     p++;
-    while (*p == ' ' || *p == '\t') p++;
+    
+    while (*p == ' ' || *p == '\t') 
+        p++;
+    
     char *end = NULL;
     long v = strtol(p, &end, 10);
-    if (p == end) return 0;
+    
+    if (p == end) 
+        return 0;
+    
     *out = (int)v;
+    
     return 1;
 }
 
@@ -413,41 +518,70 @@ static void process_line(const char *line)
 
 static void echo_line_usart2(const char *line)
 {
-    size_t len = strlen(line);
-    if (len > 0) {
-        HAL_UART_Transmit(&huart2, (uint8_t *)line, len, 20);
+    // Skip if previous echo still in progress
+    if (echo_busy) {
+        return;
     }
-    uint8_t nl = '\n';
-    HAL_UART_Transmit(&huart2, &nl, 1, 5);
+
+    size_t len = strlen(line);
+    if (len > 0 && len < ESP_RX_BUF_LEN) {
+        echo_busy = 1;
+
+        // Copy to echo buffer and add newline
+        memcpy(echo_buffer, line, len);
+        echo_buffer[len] = '\n';
+
+        // Non-blocking DMA transmit
+        HAL_UART_Transmit_DMA(&huart2, (uint8_t *)echo_buffer, len + 1);
+    }
 }
 
-void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+// DMA RX Event callback - called when idle line detected or buffer full
+void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
 {
     if (huart->Instance != USART1) {
         return;
     }
 
-    if (esp_rx_byte == '\n') {
-        esp_rx_line[esp_rx_len] = '\0';
-        if (esp_rx_len > 0) {
-            process_line(esp_rx_line);
-            echo_line_usart2(esp_rx_line);
-        }
-        esp_rx_len = 0;
-    } else if (esp_rx_len < (ESP_RX_BUF_LEN - 1)) {
-        esp_rx_line[esp_rx_len++] = (char)esp_rx_byte;
-    } else {
-        esp_rx_len = 0; // overflow, reset buffer
+    // Prevent duplicate processing if callback fires multiple times
+    if (uart_rx_busy) {
+        return;
+    }
+    uart_rx_busy = 1;
+
+    // Toggle PA8 to show callback is being called
+    HAL_GPIO_TogglePin(OUT_PORT, OUT_PIN);
+
+    // Null-terminate the received data
+    if (Size > 0 && Size < ESP_RX_BUF_LEN) {
+        esp_rx_line[Size] = '\0';
+
+        // Process and echo the line
+        process_line(esp_rx_line);
+        echo_line_usart2(esp_rx_line);  // Non-blocking DMA echo
     }
 
-    start_uart_rx();
+    // Restart DMA reception for next message
+    HAL_StatusTypeDef status = HAL_UARTEx_ReceiveToIdle_DMA(&huart1, (uint8_t *)esp_rx_line, ESP_RX_BUF_LEN);
+
+    uart_rx_busy = 0;
 }
 
-// Add UART error callback to restart reception on error
+// UART TX complete callback - called when DMA finishes transmitting
+void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
+{
+    if (huart->Instance == USART2) {
+        echo_busy = 0;  // Ready for next echo
+    }
+}
+
+// UART error callback to restart reception on error
 void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)
 {
     if (huart->Instance == USART1) {
         start_uart_rx();
+    } else if (huart->Instance == USART2) {
+        echo_busy = 0;  // Clear busy flag on error
     }
 }
 
@@ -490,6 +624,82 @@ static void SystemClock_Config(void)
     {
         Error_Handler();
     }
+}
+
+/**
+ * @brief Draws a line using Bresenham's algorithm with pixel character 0xD5
+ * @param x0 Starting X coordinate
+ * @param y0 Starting Y coordinate
+ * @param x1 Ending X coordinate
+ * @param y1 Ending Y coordinate
+ * @param character Character to use for drawing (typically 0xD5 for pixels)
+ */
+static void draw_line(int8_t x0, int8_t y0, int8_t x1, int8_t y1, uint8_t character)
+{
+    int16_t dx = abs(x1 - x0);  // Use int16_t to prevent overflow
+    int16_t dy = abs(y1 - y0);
+    int8_t sx = (x0 < x1) ? 1 : -1;
+    int8_t sy = (y0 < y1) ? 1 : -1;
+    int16_t err = dx - dy;       // Error term needs int16_t
+    int8_t x = x0;
+    int8_t y = y0;
+    uint8_t step_counter = 0;
+    const uint8_t step_size = 5;  // Draw every 3rd pixel
+
+    while (1) {
+        // Draw pixel at current position (only every Nth step)
+        if (step_counter % step_size == 0) {
+            bitbang_character(character, y, x);
+        }
+        step_counter++;
+
+        // Check if we've reached the end point
+        if (x == x1 && y == y1) {
+            break;
+        }
+
+        int16_t e2 = 2 * err;  // This can overflow int8_t, needs int16_t
+
+        if (e2 > -dy) {
+            err -= dy;
+            x += sx;
+        }
+
+        if (e2 < dx) {
+            err += dx;
+            y += sy;
+        }
+    }
+}
+
+/**
+ * @brief Draws hour and minute hands on the clock display
+ * @param hour Current hour (0-23)
+ * @param minute Current minute (0-59)
+ */
+static void draw_clock_hands(uint8_t hour, uint8_t minute)
+{
+    // Convert 24-hour to 12-hour format for clock hand positioning
+    uint8_t hour_12 = hour % 12;
+
+    // Calculate minute hand angle (12 o'clock = top = 90°, clockwise)
+    // Each minute = 6 degrees, minute hand length = 80 pixels
+    float minute_angle = (M_PI / 2.0f) - (minute * M_PI / 30.0f);
+    int8_t minute_x = (int8_t)(80.0f * cosf(minute_angle));
+    int8_t minute_y = (int8_t)(80.0f * sinf(minute_angle));
+
+    // Calculate hour hand angle
+    // Each hour = 30 degrees, plus offset for minutes (0.5 degrees per minute)
+    // Hour hand length = 50 pixels
+    float hour_angle = (M_PI / 2.0f) - ((hour_12 * M_PI / 6.0f) + (minute * M_PI / 360.0f));
+    int8_t hour_x = (int8_t)(50.0f * cosf(hour_angle));
+    int8_t hour_y = (int8_t)(50.0f * sinf(hour_angle));
+
+    // Draw minute hand (from center to minute position) with pixel character 0xD5
+    draw_line(0, 0, minute_x, minute_y, 0xD5);
+
+    // Draw hour hand (from center to hour position) with pixel character 0xD5
+    draw_line(0, 0, hour_x, hour_y, 0xD5);
 }
 
 void Error_Handler(void)

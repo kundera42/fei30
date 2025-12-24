@@ -167,6 +167,7 @@ static inline void bitbang_character(uint8_t data, int8_t posy, int8_t posx)
     // Artificial delay of ~70us
     for (uint8_t i = 0; i < 140; i++)
     {
+        // TODO: check this delay, can it be optimized? If the requirement is 70ns then we should measure on the scope it indeed is. 
         DELAY;
     }
 }

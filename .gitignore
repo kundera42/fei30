@@ -75,3 +75,8 @@ _deps
 
 # Local settings
 .claude/settings.local.json
+build/stm32l432-blink.bin
+build/stm32l432-blink.bin
+build/stm32l432-blink.elf
+build/stm32l432-blink.hex
+build/stm32l432-blink.map
