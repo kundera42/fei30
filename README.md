@@ -55,3 +55,9 @@ The default `flash` target issues `STM32_Programmer_CLI -c port=SWD -w ... 0x080
 - Change `LED_PIN` / `LED_GPIO_PORT` inside `src/main.c` to match the LED you want to toggle.
 - Edit `linker/STM32L432KCUx_FLASH.ld` if you shoehorn a different memory map.
 - `stm32l4xx_hal_conf.h` enables the full HAL by default; disable modules you do not use to trim build time.
+
+## ESP-01 (WiFi/NTP time source)
+The ESP-01 on the carrier board runs separate PlatformIO firmware and sends NTP time over USART1 (PB6/PB7).
+To reprogram it in place through the STM32 (`flash-esp-bridge` target + `tools/esp_bridge/flash_esp01.py`),
+see `docs/esp01-flashing.md`. The `flash` targets also clear `FLASH_SR.PEMPTY` after programming;
+without that the L432 starts the ROM bootloader instead of the new image.

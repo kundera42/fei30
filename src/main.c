@@ -1,8 +1,10 @@
 #include "stm32l4xx_hal.h"
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 #include <math.h>
 #include "spi_bitbang_master.h"
+#include "rtc_manager.h"
 
 #define M_PI 3.14159265358979323846
 
@@ -33,6 +35,10 @@ static char esp_rx_line[ESP_RX_BUF_LEN];
 static volatile uint8_t uart_rx_busy = 0;
 static char echo_buffer[ESP_RX_BUF_LEN + 1];  // +1 for newline
 static volatile uint8_t echo_busy = 0;
+
+// RTC time transmission buffer
+static char rtc_tx_buffer[64];
+static volatile uint8_t rtc_tx_busy = 0;
 
 int testcounter = 0;
 
@@ -159,6 +165,7 @@ static void process_line(const char *line);
 static int has_type_time(const char *line);
 static int parse_int_field(const char *line, const char *key, int *out);
 static void echo_line_usart2(const char *line);
+static void send_rtc_time_usart2(void);
 static void draw_line(int8_t x0, int8_t y0, int8_t x1, int8_t y1, uint8_t character);
 static void draw_clock_hands(uint8_t hour, uint8_t minute);
 void Error_Handler(void);
@@ -167,6 +174,7 @@ int main(void)
 {
     HAL_Init();
     SystemClock_Config();
+    rtc_init();
     MX_GPIO_Init();
     MX_DMA_Init();
     MX_USART1_UART_Init();
@@ -180,9 +188,17 @@ int main(void)
     static uint32_t anim_counter = 0;
     static uint8_t sim_hour = 2;
     static uint8_t sim_minute = 10;
+    static uint32_t last_rtc_send_tick = 0;
 
     while (1)
     {
+        // Send RTC time every 1000ms (1 second)
+        uint32_t current_tick = HAL_GetTick();
+        if (current_tick - last_rtc_send_tick >= 1000) {
+            send_rtc_time_usart2();
+            last_rtc_send_tick = current_tick;
+        }
+
         // Extract hour and minute from ESP time
         uint8_t hour = esp_time.valid ? esp_time.hour : 0;
         uint8_t minute = esp_time.valid ? esp_time.minute : 0;
@@ -502,6 +518,7 @@ static void process_line(const char *line)
         parse_int_field(line, "\"minute\"", &minute) &&
         parse_int_field(line, "\"second\"", &second)) {
 
+        // Update esp_time for backward compatibility
         EspTime t = {
             .epoch = (uint32_t)epoch,
             .year = (uint16_t)year,
@@ -513,6 +530,11 @@ static void process_line(const char *line)
             .valid = 1
         };
         esp_time = t;
+
+        // Sync RTC with NTP time
+        rtc_sync_from_esp((uint16_t)year, (uint8_t)month, (uint8_t)day,
+                         (uint8_t)hour, (uint8_t)minute, (uint8_t)second,
+                         (uint32_t)epoch);
     }
 }
 
@@ -533,6 +555,30 @@ static void echo_line_usart2(const char *line)
 
         // Non-blocking DMA transmit
         HAL_UART_Transmit_DMA(&huart2, (uint8_t *)echo_buffer, len + 1);
+    }
+}
+
+static void send_rtc_time_usart2(void)
+{
+    // Skip if previous transmission still in progress
+    if (rtc_tx_busy || echo_busy) {
+        return;
+    }
+
+    rtc_time_t current_time;
+    if (rtc_get_time(&current_time) != 0) {
+        return;  // Failed to read RTC
+    }
+
+    // Format RTC time: "RTC: 2025-12-26 14:30:45\n"
+    int len = snprintf(rtc_tx_buffer, sizeof(rtc_tx_buffer),
+                       "RTC: %04u-%02u-%02u %02u:%02u:%02u\n",
+                       current_time.year, current_time.month, current_time.day,
+                       current_time.hour, current_time.minute, current_time.second);
+
+    if (len > 0 && len < (int)sizeof(rtc_tx_buffer)) {
+        rtc_tx_busy = 1;
+        HAL_UART_Transmit_DMA(&huart2, (uint8_t *)rtc_tx_buffer, len);
     }
 }
 
@@ -571,7 +617,8 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
 void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
 {
     if (huart->Instance == USART2) {
-        echo_busy = 0;  // Ready for next echo
+        echo_busy = 0;      // Ready for next echo
+        rtc_tx_busy = 0;    // Ready for next RTC transmission
     }
 }
 
@@ -581,14 +628,17 @@ void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)
     if (huart->Instance == USART1) {
         start_uart_rx();
     } else if (huart->Instance == USART2) {
-        echo_busy = 0;  // Clear busy flag on error
+        echo_busy = 0;      // Clear busy flag on error
+        rtc_tx_busy = 0;    // Clear RTC busy flag on error
     }
 }
 
+// NOTE: check that indeed using only MSI for SYSCLK we can achieve 80MHz, it seems for this board the MSI maxes out at 48MHz. No PLL available then.
 static void SystemClock_Config(void)
 {
     RCC_OscInitTypeDef osc = {0};
     RCC_ClkInitTypeDef clk = {0};
+    RCC_PeriphCLKInitTypeDef periph_clk = {0};
 
     __HAL_RCC_PWR_CLK_ENABLE();
 #ifdef PWR_REGULATOR_VOLTAGE_SCALE1_BOOST
@@ -597,10 +647,24 @@ static void SystemClock_Config(void)
     HAL_PWREx_ControlVoltageScaling(PWR_REGULATOR_VOLTAGE_SCALE1);
 #endif
 
-    osc.OscillatorType = RCC_OSCILLATORTYPE_MSI;
+    // Enable backup domain access for LSE configuration
+    HAL_PWR_EnableBkUpAccess();
+
+    // Configure LSE and MSI with LSE calibration
+    osc.OscillatorType = RCC_OSCILLATORTYPE_MSI | RCC_OSCILLATORTYPE_LSE;
+  
+    // LSE configuration for RTC
+    osc.LSEState = RCC_LSE_ON;
+
+    // MSI configuration with LSE calibration enabled
     osc.MSIState = RCC_MSI_ON;
-    osc.MSIClockRange = RCC_MSIRANGE_6;
+    osc.HSEState       = RCC_HSE_OFF;//CHECKME, we rely purely on MSI
+    osc.HSIState       = RCC_HSI_OFF;//CHECKME, we rely purely on MSI
+    osc.MSIClockRange = RCC_MSIRANGE_6;  // 4 MHz
     osc.MSICalibrationValue = RCC_MSICALIBRATION_DEFAULT;
+    osc.MSIClockRange = RCC_MSIRANGE_6; //RCC_CR_MSIRANGE_7
+
+    // PLL configuration: MSI 4 MHz × 40 ÷ 2 = 80 MHz SYSCLK
     osc.PLL.PLLState = RCC_PLL_ON;
     osc.PLL.PLLSource = RCC_PLLSOURCE_MSI;
     osc.PLL.PLLM = 1;
@@ -608,10 +672,29 @@ static void SystemClock_Config(void)
     osc.PLL.PLLR = RCC_PLLR_DIV2;
     osc.PLL.PLLP = RCC_PLLP_DIV7;
     osc.PLL.PLLQ = RCC_PLLQ_DIV4;
+
+    ///\note Prior to enable the PLL-mode of the MSI for automatic hardware
+    ///      calibration LSE oscillator is to be enabled with HAL_RCC_OscConfig().
     if (HAL_RCC_OscConfig(&osc) != HAL_OK)
     {
         Error_Handler();
     }
+
+    // Enable MSI auto-calibration using LSE
+    HAL_RCCEx_EnableMSIPLLMode();
+    // See: https://community.st.com/t5/stm32-mcus-products/stm32l4-msi-pll-mode-auto-trimming-with-lse-stable-only-when/td-p/324258
+    //_HAL_RCC_SET_MSIPLLEN();  
+
+    // Configure RTC clock source to use LSE
+    periph_clk.PeriphClockSelection = RCC_PERIPHCLK_RTC;
+    periph_clk.RTCClockSelection = RCC_RTCCLKSOURCE_LSE;
+    if (HAL_RCCEx_PeriphCLKConfig(&periph_clk) != HAL_OK)
+    {
+        Error_Handler();
+    }
+
+    // Enable RTC APB clock
+    __HAL_RCC_RTC_ENABLE();
 
     clk.ClockType = RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_HCLK |
                     RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;

@@ -38,10 +38,13 @@ set(HAL_SOURCES
     ${HAL_DRIVER_DIR}/Src/stm32l4xx_hal_uart_ex.c
     ${HAL_DRIVER_DIR}/Src/stm32l4xx_hal_dma.c
     ${HAL_DRIVER_DIR}/Src/stm32l4xx_hal_dma_ex.c
+    ${HAL_DRIVER_DIR}/Src/stm32l4xx_hal_rtc.c
+    ${HAL_DRIVER_DIR}/Src/stm32l4xx_hal_rtc_ex.c
 )
 
 set(PROJECT_SOURCES
     src/main.c
+    src/rtc_manager.c
     src/stm32l4xx_it.c
     src/system_stm32l4xx.c
     startup/startup_stm32l432xx.s
@@ -81,6 +84,8 @@ target_link_options(${PROJECT_NAME}
         -mthumb
         -mfpu=fpv4-sp-d16
         -mfloat-abi=hard
+        --specs=nano.specs
+        --specs=nosys.specs
         -Wl,-Map=$<TARGET_FILE_DIR:${PROJECT_NAME}>/${PROJECT_NAME}.map
         -Wl,--gc-sections
         -Wl,--start-group
@@ -117,7 +122,51 @@ endif()
 
 add_custom_target(flash
     COMMAND ${_flash_command}
+    COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_SOURCE_DIR}/cmake/clear_pempty.cmake
     DEPENDS ${PROJECT_NAME}
     COMMENT "Flashing target using ${STM32_FLASH_TOOL}"
+    USES_TERMINAL
+)
+
+# Temporary UART passthrough (ST-LINK VCP <-> ESP-01) for talking to / flashing the ESP-01.
+# Flash with `cmake --build build --target flash-esp-bridge`, re-flash the app with `--target flash`.
+add_executable(esp-bridge
+    tools/esp_bridge/esp_bridge.c
+    src/system_stm32l4xx.c
+    startup/startup_stm32l432xx.s
+)
+
+target_include_directories(esp-bridge
+    PRIVATE
+        config
+        ${CMSIS_DEVICE_DIR}/Include
+        ${CMSIS_CORE_DIR}
+)
+
+target_compile_definitions(esp-bridge PRIVATE STM32L432xx)
+
+target_compile_options(esp-bridge
+    PRIVATE
+        $<$<COMPILE_LANGUAGE:C>:-mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard -ffunction-sections -fdata-sections -Wall -Wextra -O2 -g3>
+        $<$<COMPILE_LANGUAGE:ASM>:-mcpu=cortex-m4 -mthumb>
+)
+
+target_link_options(esp-bridge
+    PRIVATE
+        -T${LINKER_SCRIPT}
+        -mcpu=cortex-m4
+        -mthumb
+        -mfpu=fpv4-sp-d16
+        -mfloat-abi=hard
+        --specs=nano.specs
+        --specs=nosys.specs
+        -Wl,--gc-sections
+)
+
+add_custom_target(flash-esp-bridge
+    COMMAND STM32_Programmer_CLI -c port=SWD -w $<TARGET_FILE:esp-bridge> -rst
+    COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_SOURCE_DIR}/cmake/clear_pempty.cmake
+    DEPENDS esp-bridge
+    COMMENT "Flashing ESP-01 UART bridge"
     USES_TERMINAL
 )
