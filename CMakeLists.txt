@@ -170,3 +170,59 @@ add_custom_target(flash-esp-bridge
     COMMENT "Flashing ESP-01 UART bridge"
     USES_TERMINAL
 )
+
+# ---------------------------------------------------------------------------------------------
+# ESP-01 firmware (PlatformIO project in esp01/). See docs/esp01-flashing.md.
+#   cmake --build build --target esp01        build the ESP-01 image with PlatformIO
+#   cmake --build build --target flash-esp01  bridge -> upload ESP-01 (waits for PROG/RESET) -> app
+# ---------------------------------------------------------------------------------------------
+set(ESP01_DIR ${CMAKE_CURRENT_SOURCE_DIR}/esp01)
+set(ESP01_FIRMWARE ${ESP01_DIR}/.pio/build/esp01_1m/firmware.bin)
+set(ESP01_PORT COM3 CACHE STRING "ST-LINK virtual COM port used to reach the ESP-01 through the bridge")
+set(ESP01_WAIT_SECONDS 120 CACHE STRING "How long flash-esp01 waits for the ESP-01 bootloader")
+
+find_program(PIO_EXECUTABLE NAMES pio platformio
+    HINTS $ENV{USERPROFILE}/.platformio/penv/Scripts $ENV{HOME}/.platformio/penv/bin)
+find_package(Python3 COMPONENTS Interpreter)
+
+if(PIO_EXECUTABLE)
+    add_custom_target(esp01
+        COMMAND ${PIO_EXECUTABLE} run -d ${ESP01_DIR}
+        COMMENT "Building ESP-01 firmware with PlatformIO"
+        USES_TERMINAL
+    )
+else()
+    message(STATUS "PlatformIO not found: esp01 / flash-esp01 targets disabled")
+endif()
+
+if(PIO_EXECUTABLE AND Python3_Interpreter_FOUND)
+    # Private venv with a pinned esptool, so nothing is installed into system Python or PlatformIO
+    set(ESPTOOL_VENV ${CMAKE_BINARY_DIR}/esptool-venv)
+    if(CMAKE_HOST_WIN32)
+        set(ESPTOOL_PYTHON ${ESPTOOL_VENV}/Scripts/python.exe)
+    else()
+        set(ESPTOOL_PYTHON ${ESPTOOL_VENV}/bin/python)
+    endif()
+    set(ESPTOOL_STAMP ${ESPTOOL_VENV}/.installed)
+    add_custom_command(
+        OUTPUT ${ESPTOOL_STAMP}
+        COMMAND ${Python3_EXECUTABLE} -m venv ${ESPTOOL_VENV}
+        COMMAND ${ESPTOOL_PYTHON} -m pip install --quiet -r ${CMAKE_CURRENT_SOURCE_DIR}/tools/esp_bridge/requirements.txt
+        COMMAND ${CMAKE_COMMAND} -E touch ${ESPTOOL_STAMP}
+        DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/tools/esp_bridge/requirements.txt
+        COMMENT "Creating esptool virtualenv"
+    )
+    add_custom_target(esptool-venv DEPENDS ${ESPTOOL_STAMP})
+
+    add_custom_target(flash-esp01
+        COMMAND STM32_Programmer_CLI -c port=SWD -w $<TARGET_FILE:esp-bridge> -rst
+        COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_SOURCE_DIR}/cmake/clear_pempty.cmake
+        COMMAND ${ESPTOOL_PYTHON} ${CMAKE_CURRENT_SOURCE_DIR}/tools/esp_bridge/flash_esp01.py
+                --port ${ESP01_PORT} --wait ${ESP01_WAIT_SECONDS} ${ESP01_FIRMWARE}
+        COMMAND ${_flash_command}
+        COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_SOURCE_DIR}/cmake/clear_pempty.cmake
+        DEPENDS esp-bridge esp01 esptool-venv ${PROJECT_NAME}
+        COMMENT "Flashing ESP-01 through the STM32 bridge, then restoring the application"
+        USES_TERMINAL
+    )
+endif()

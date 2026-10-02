@@ -80,3 +80,7 @@ build/stm32l432-blink.bin
 build/stm32l432-blink.elf
 build/stm32l432-blink.hex
 build/stm32l432-blink.map
+
+# ESP-01 (PlatformIO) firmware
+esp01/.pio/
+esp01/include/secrets.h

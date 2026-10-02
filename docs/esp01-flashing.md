@@ -7,8 +7,10 @@ STM32L432 as a USB-serial bridge. Written after the first successful flash on 20
 
 | What | Where |
 |---|---|
-| ESP-01 firmware (WiFi + NTP, Arduino/PlatformIO) | `C:\Users\HAns\Documents\PlatformIO\Projects\esp-01` (separate repo) |
-| ESP-01 build output | `.pio/build/esp01_1m/firmware.bin` in that project (`pio run`) |
+| ESP-01 firmware (WiFi + NTP, Arduino/PlatformIO) | `esp01/` (imported 2026-10-03 from the old `kundera42/esp-01` repo) |
+| WiFi credentials | `esp01/include/secrets.h` (gitignored; copy from `secrets.example.h`) |
+| ESP-01 build output | `esp01/.pio/build/esp01_1m/firmware.bin` (`cmake --build build --target esp01`) |
+| esptool | `build/esptool-venv` (target `esptool-venv`, version pinned in `tools/esp_bridge/requirements.txt`) |
 | STM32 bridge firmware | `tools/esp_bridge/esp_bridge.c` (CMake target `esp-bridge`) |
 | Upload script | `tools/esp_bridge/flash_esp01.py` |
 | ESP-01 <-> STM32 protocol | `ESP01_STM32_INTEGRATION_GUIDE.md` |
@@ -38,16 +40,27 @@ TX    EN     RST    VCC
 RST sits right next to VCC: twice the ST-LINK USB dropped out while jumpering RST, most likely from
 touching 3.3V. Prefer the power-cycle method below.
 
-## Procedure
+## Quick way (one command)
 
-1. Build the ESP firmware: `pio run` in the esp-01 project.
+```
+cmake --build build --target flash-esp01
+```
+
+This builds everything and puts the bridge on the STM32. It then waits (120 s by default, set with
+`ESP01_WAIT_SECONDS`) for you to put the ESP-01 in its bootloader (step 3 below). It uploads, verifies,
+and puts the clock application back on the STM32. Afterwards, reset or power-cycle the ESP-01 with GPIO0
+released. If your COM port differs: `cmake -B build -DESP01_PORT=COM5`.
+
+## Procedure (manual steps)
+
+1. Build the ESP firmware: `cmake --build build --target esp01` (runs `pio run -d esp01`).
 2. Put the bridge on the STM32: `cmake --build build --target flash-esp-bridge`
 3. Put the ESP-01 in its ROM bootloader:
    - **Preferred:** with power off, connect GPIO0 to GND, power up the carrier, then remove the jumper.
    - Alternative: hold GPIO0 to GND, tap RST to GND, release GPIO0.
-4. Upload (needs `pip install esptool`, tested with 5.4):
+4. Upload (run `cmake --build build --target esptool-venv` once to get esptool):
    ```
-   python tools/esp_bridge/flash_esp01.py --port COM3 <esp-01 project>/.pio/build/esp01_1m/firmware.bin
+   build/esptool-venv/Scripts/python tools/esp_bridge/flash_esp01.py --port COM3 esp01/.pio/build/esp01_1m/firmware.bin
    ```
    Takes about 20 s and ends with `Hash of data verified.`
 5. Reset the ESP-01 (power-cycle, GPIO0 left alone). Optional: watch COM3 at 115200 baud, the bridge is still
@@ -76,6 +89,11 @@ gets eight clean replies. Handing esptool a port object that drains the VCP in a
 ### Clock accuracy of the bridge
 The bridge runs at 48 MHz from MSI with LSE PLL-mode trimming, so both UARTs are within ~0.1 % of
 115200 baud. The ESP-01 ROM loader auto-bauds on the SYNC pattern, so it follows whatever the bridge sends.
+
+### Reproducible ESP-01 builds
+`esp01/platformio.ini` pins ArduinoJson to 7.4.2. With the old `^7.2.1` range, a fresh checkout pulled 7.4.3
+and produced a different binary from the one that was flashed and verified. With the pin, the in-repo build
+is byte-identical to that image.
 
 ## Making this easier on the next board revision
 See [pcb-esp01-programming-request.md](pcb-esp01-programming-request.md): a PROG button on GPIO0 and a

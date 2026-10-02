@@ -103,12 +103,25 @@ class BufferedPort:
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--port", default="COM3", help="ST-LINK virtual COM port (default COM3)")
-    ap.add_argument("firmware", nargs="?", help="ESP-01 image to write at 0x0 (e.g. .pio/build/esp01_1m/firmware.bin)")
+    ap.add_argument("--wait", type=int, default=0, metavar="SEC",
+                    help="keep retrying for SEC seconds until the ESP-01 is put in its bootloader")
+    ap.add_argument("firmware", nargs="?", help="ESP-01 image to write at 0x0 (e.g. esp01/.pio/build/esp01_1m/firmware.bin)")
     args = ap.parse_args()
 
     port = BufferedPort(args.port)
     try:
-        esp = esptool.cmds.detect_chip(port, 115200, "no-reset", False, 4)
+        if args.wait:
+            print(f"Waiting up to {args.wait} s for the ESP-01 bootloader:\n"
+                  "  hold GPIO0 to GND and reset / power-cycle the ESP-01, then release GPIO0.", flush=True)
+        deadline = time.time() + args.wait
+        while True:
+            try:
+                esp = esptool.cmds.detect_chip(port, 115200, "no-reset", False, 4)
+                break
+            except esptool.FatalError:
+                if time.time() >= deadline:
+                    raise
+                port.reset_input_buffer()
         esp = esp.run_stub()
         mac = ":".join(f"{b:02x}" for b in esp.read_mac())
         print(f"Chip: {esp.get_chip_description()}  MAC: {mac}")

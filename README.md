@@ -57,7 +57,8 @@ The default `flash` target issues `STM32_Programmer_CLI -c port=SWD -w ... 0x080
 - `stm32l4xx_hal_conf.h` enables the full HAL by default; disable modules you do not use to trim build time.
 
 ## ESP-01 (WiFi/NTP time source)
-The ESP-01 on the carrier board runs separate PlatformIO firmware and sends NTP time over USART1 (PB6/PB7).
-To reprogram it in place through the STM32 (`flash-esp-bridge` target + `tools/esp_bridge/flash_esp01.py`),
-see `docs/esp01-flashing.md`. The `flash` targets also clear `FLASH_SR.PEMPTY` after programming;
+The ESP-01 on the carrier board runs the PlatformIO firmware in `esp01/` and sends NTP time over USART1
+(PB6/PB7). Before the first build, copy `esp01/include/secrets.example.h` to `esp01/include/secrets.h` and fill
+in your WiFi credentials. `cmake --build build --target esp01` builds it, and `--target flash-esp01` reprograms
+the soldered module through the STM32 (see `docs/esp01-flashing.md`). The `flash` targets also clear `FLASH_SR.PEMPTY` after programming;
 without that the L432 starts the ROM bootloader instead of the new image.
