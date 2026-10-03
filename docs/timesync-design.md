@@ -669,7 +669,7 @@ Backup battery:
 - STM32L4 Reference Manual RM0394 Section 38 (RTC)
 - STM32L432KC Datasheet DS10198
 - AN4759 Using the hardware RTC with the STM32 HAL
-- ESP01_STM32_INTEGRATION_GUIDE.md (NTP data format)
+- esp01-protocol.md (NTP data format)
 
 ## Revision History
 
@@ -679,4 +679,4 @@ Backup battery:
 
 ## User notes related to timing
 
-See "Real-time clock (RTC) and backup registers" in `stm32l432kc.pdf`
+See "Real-time clock (RTC) and backup registers" in `reference/stm32l432kc.pdf`

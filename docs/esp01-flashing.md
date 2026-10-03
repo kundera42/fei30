@@ -13,7 +13,7 @@ STM32L432 as a USB-serial bridge. Written after the first successful flash on 20
 | esptool | `build/esptool-venv` (target `esptool-venv`, version pinned in `tools/esp_bridge/requirements.txt`) |
 | STM32 bridge firmware | `tools/esp_bridge/esp_bridge.c` (CMake target `esp-bridge`) |
 | Upload script | `tools/esp_bridge/flash_esp01.py` |
-| ESP-01 <-> STM32 protocol | `ESP01_STM32_INTEGRATION_GUIDE.md` |
+| ESP-01 <-> STM32 protocol | [esp01-protocol.md](esp01-protocol.md) |
 
 ## Hardware connections (carrier board)
 
@@ -74,10 +74,10 @@ Quick health checks through the bridge:
 ## Pitfalls found during bring-up
 
 ### STM32 boots the ROM bootloader after flashing
-STM32CubeProgrammer's erase leaves `FLASH_SR.PEMPTY` set; the reset after programming then starts the
-system-memory bootloader (PC = `0x1FFF2Dxx`, no UART output) instead of the new image.
-`cmake/clear_pempty.cmake` clears the flag and resets; both `flash` and `flash-esp-bridge` run it.
-The CLI prints a verify error for that register write; that is expected.
+With `FLASH_SR.PEMPTY` set, the reset after programming starts the system-memory bootloader
+(PC = `0x1FFF2Dxx`, no UART output) instead of the new image. The flag is latched at power-on, and writing
+1 toggles it. `cmake/clear_pempty.cmake` clears it only when it is set, then resets; all flash targets run
+it. Root cause and manual recovery: [SPM §7.1](SPM.md#71-board-boots-the-rom-bootloader-after-flashing-flash_srpempty).
 
 ### esptool cannot connect directly on the ST-LINK COM port
 `esptool --port COM3` (both 3.0 bundled with PlatformIO and 5.4) loses bytes in the middle of the eight
@@ -96,5 +96,5 @@ and produced a different binary from the one that was flashed and verified. With
 is byte-identical to that image.
 
 ## Making this easier on the next board revision
-See [pcb-esp01-programming-request.md](pcb-esp01-programming-request.md): a PROG button on GPIO0 and a
+See [hardware/pcb-esp01-programming-request.md](hardware/pcb-esp01-programming-request.md): a PROG button on GPIO0 and a
 RESET button on RST, plus optional STM32 control of both, so the procedure becomes "hold PROG, tap RESET".

@@ -1,64 +1,29 @@
-# STM32L432KCU6 Blink Project
+# fei30
 
-This repository contains a minimal STM32Cube HAL based firmware for the STM32L432KCU6 (Nucleo-32/L432KC) that can be built and flashed with CMake.
+Firmware for a NUCLEO-L432KC (STM32L432KCU6) that drives a bit-banged display. It keeps time in the RTC,
+synced over NTP by an ESP-01, and reads temperature and pressure from a BMP180. Status goes out once a
+second on the ST-LINK virtual COM port.
 
-## Prerequisites
-- `arm-none-eabi-gcc`, `arm-none-eabi-binutils`, and `arm-none-eabi-gdb`  
-  > Windows users: install the Arm GNU Toolchain for Windows and add its `bin` directory to `PATH` (see `docs/WINDOWS.md`).
-- CMake 3.20+
-- Ninja or Make (examples below assume Ninja)
-- ST-LINK CLI (`STM32_Programmer_CLI`) or change the `STM32_FLASH_TOOL` cache variable to match your preferred programmer
+## Quick start
 
-All command examples below assume a Linux shell (WSL or native). For native Windows setup and PowerShell commands see `docs/WINDOWS.md`.
-
-## One-time setup
-```bash
-git submodule update --init --depth 1 extern/STM32CubeL4 \
-    extern/STM32CubeL4/Drivers/STM32L4xx_HAL_Driver \
-    extern/STM32CubeL4/Drivers/CMSIS/Device/ST/STM32L4xx
 ```
-
-## Configure and build
-```bash
-cmake -S . -B build -G Ninja \
-  -DCMAKE_TOOLCHAIN_FILE=cmake/toolchain-arm-none-eabi.cmake \
-  -DCMAKE_BUILD_TYPE=Release
-cmake --build build
-```
-
-The build generates `.elf`, `.bin`, `.hex`, and `.map` inside the `build` directory. Run `cmake --build build --target stm32l432-blink_size` to inspect the image size.
-
-> Prefer building inside WSL2? Follow `docs/WSL.md` for package installation and Linux command examples.
->
-> Prefer staying on Windows? Follow `docs/WINDOWS.md` to install the Arm GNU Toolchain, STM32CubeProgrammer/ST-LINK drivers, and run the same CMake/Ninja workflow from PowerShell.
-
-## Flashing and debugging
-Set `STM32_FLASH_TOOL` when configuring if you use a flashing tool other than `STM32_Programmer_CLI`. For example, to use the open-source `st-flash` utility from the `stlink` project:
-
-```bash
-cmake -S . -B build -G Ninja \
-  -DCMAKE_TOOLCHAIN_FILE=cmake/toolchain-arm-none-eabi.cmake \
-  -DCMAKE_BUILD_TYPE=Release \
-  -DSTM32_FLASH_TOOL=stlink
+cmake -S . -B build -G Ninja -DCMAKE_TOOLCHAIN_FILE=cmake/toolchain-arm-none-eabi.cmake
 cmake --build build --target flash
 ```
 
-Flash the board via:
+Then open the ST-LINK COM port at 115200 8N1.
 
-```bash
-cmake --build build --target flash
-```
+For the ESP-01 firmware, first copy `esp01/include/secrets.example.h` to `esp01/include/secrets.h` and fill
+in your WiFi credentials. Then run `cmake --build build --target flash-esp01`.
 
-The default `flash` target issues `STM32_Programmer_CLI -c port=SWD -w ... 0x08000000 -rst`.
+## Documentation
 
-## Customization
-- Change `LED_PIN` / `LED_GPIO_PORT` inside `src/main.c` to match the LED you want to toggle.
-- Edit `linker/STM32L432KCUx_FLASH.ld` if you shoehorn a different memory map.
-- `stm32l4xx_hal_conf.h` enables the full HAL by default; disable modules you do not use to trim build time.
-
-## ESP-01 (WiFi/NTP time source)
-The ESP-01 on the carrier board runs the PlatformIO firmware in `esp01/` and sends NTP time over USART1
-(PB6/PB7). Before the first build, copy `esp01/include/secrets.example.h` to `esp01/include/secrets.h` and fill
-in your WiFi credentials. `cmake --build build --target esp01` builds it, and `--target flash-esp01` reprograms
-the soldered module through the STM32 (see `docs/esp01-flashing.md`). The `flash` targets also clear `FLASH_SR.PEMPTY` after programming;
-without that the L432 starts the ROM bootloader instead of the new image.
+| Document | For |
+|---|---|
+| [docs/UM.md](docs/UM.md) | User manual: wiring, flashing, serial output, troubleshooting |
+| [docs/SPM.md](docs/SPM.md) | Software programming manual: host setup, architecture, pin map, build targets, conventions, known issues |
+| [docs/esp01-protocol.md](docs/esp01-protocol.md) | ESP-01 ↔ STM32 serial protocol |
+| [docs/esp01-flashing.md](docs/esp01-flashing.md) | Reprogramming the ESP-01 in place |
+| [docs/timesync-design.md](docs/timesync-design.md) | RTC / NTP time sync design |
+| [docs/hardware/](docs/hardware/) | Carrier board issues and change requests |
+| [docs/reference/](docs/reference/) | Vendor datasheets and manuals |
