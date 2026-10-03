@@ -5,6 +5,7 @@
 #include <math.h>
 #include "spi_bitbang_master.h"
 #include "rtc_manager.h"
+#include "bmp180.h"
 
 #define M_PI 3.14159265358979323846
 
@@ -16,6 +17,7 @@
 
 UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
+I2C_HandleTypeDef hi2c3;
 DMA_HandleTypeDef hdma_usart1_rx;
 DMA_HandleTypeDef hdma_usart2_tx;
 
@@ -36,9 +38,9 @@ static volatile uint8_t uart_rx_busy = 0;
 static char echo_buffer[ESP_RX_BUF_LEN + 1];  // +1 for newline
 static volatile uint8_t echo_busy = 0;
 
-// RTC time transmission buffer
-static char rtc_tx_buffer[64];
-static volatile uint8_t rtc_tx_busy = 0;
+// Periodic status (RTC time + BMP180 reading) transmission buffer
+static char status_tx_buffer[128];
+static volatile uint8_t status_tx_busy = 0;
 
 int testcounter = 0;
 
@@ -160,12 +162,13 @@ static void MX_GPIO_Init(void);
 static void MX_DMA_Init(void);
 static void MX_USART1_UART_Init(void);
 static void MX_USART2_UART_Init(void);
+static void MX_I2C3_Init(void);
 static void start_uart_rx(void);
 static void process_line(const char *line);
 static int has_type_time(const char *line);
 static int parse_int_field(const char *line, const char *key, int *out);
 static void echo_line_usart2(const char *line);
-static void send_rtc_time_usart2(void);
+static void send_status_usart2(void);
 static void draw_line(int8_t x0, int8_t y0, int8_t x1, int8_t y1, uint8_t character);
 static void draw_clock_hands(uint8_t hour, uint8_t minute);
 void Error_Handler(void);
@@ -179,6 +182,8 @@ int main(void)
     MX_DMA_Init();
     MX_USART1_UART_Init();
     MX_USART2_UART_Init();
+    MX_I2C3_Init();
+    bmp180_init(&hi2c3, 3, 1000);  // ultra high resolution, 1 Hz; retries if absent
     start_uart_rx();
 
     static int i, j;
@@ -192,10 +197,12 @@ int main(void)
 
     while (1)
     {
-        // Send RTC time every 1000ms (1 second)
+        bmp180_poll();
+
+        // Send RTC time and sensor reading every 1000ms (1 second)
         uint32_t current_tick = HAL_GetTick();
         if (current_tick - last_rtc_send_tick >= 1000) {
-            send_rtc_time_usart2();
+            send_status_usart2();
             last_rtc_send_tick = current_tick;
         }
 
@@ -460,6 +467,40 @@ static void MX_USART2_UART_Init(void)
     HAL_NVIC_EnableIRQ(USART2_IRQn);
 }
 
+// BMP180 on I2C3: PA7 = SCL (Nucleo A6), PB4 = SDA (Nucleo D12).
+// I2C1's pins are taken by USART1 (PB6/PB7) and the display bit-bang (PA10).
+static void MX_I2C3_Init(void)
+{
+    __HAL_RCC_GPIOA_CLK_ENABLE();
+    __HAL_RCC_GPIOB_CLK_ENABLE();
+    __HAL_RCC_I2C3_CLK_ENABLE();  // kernel clock defaults to PCLK1 (80 MHz)
+
+    GPIO_InitTypeDef gpio = {0};
+    gpio.Mode = GPIO_MODE_AF_OD;
+    gpio.Pull = GPIO_PULLUP;  // weak backup; the breakout has its own pull-ups
+    gpio.Speed = GPIO_SPEED_FREQ_HIGH;
+    gpio.Alternate = GPIO_AF4_I2C3;
+    gpio.Pin = GPIO_PIN_7;
+    HAL_GPIO_Init(GPIOA, &gpio);
+    gpio.Pin = GPIO_PIN_4;
+    HAL_GPIO_Init(GPIOB, &gpio);
+
+    hi2c3.Instance = I2C3;
+    hi2c3.Init.Timing = 0x10909CEC;  // 100 kHz standard mode @ 80 MHz (CubeMX)
+    hi2c3.Init.OwnAddress1 = 0;
+    hi2c3.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
+    hi2c3.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
+    hi2c3.Init.OwnAddress2 = 0;
+    hi2c3.Init.OwnAddress2Masks = I2C_OA2_NOMASK;
+    hi2c3.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
+    hi2c3.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
+
+    if (HAL_I2C_Init(&hi2c3) != HAL_OK) {
+        Error_Handler();
+    }
+    HAL_I2CEx_ConfigAnalogFilter(&hi2c3, I2C_ANALOGFILTER_ENABLE);
+}
+
 static void start_uart_rx(void)
 {
     // Use DMA with idle line detection - receives until line goes idle (message complete)
@@ -558,27 +599,41 @@ static void echo_line_usart2(const char *line)
     }
 }
 
-static void send_rtc_time_usart2(void)
+static void send_status_usart2(void)
 {
     // Skip if previous transmission still in progress
-    if (rtc_tx_busy || echo_busy) {
+    if (status_tx_busy || echo_busy) {
         return;
     }
 
+    int len = 0;
     rtc_time_t current_time;
-    if (rtc_get_time(&current_time) != 0) {
-        return;  // Failed to read RTC
-    }
-
-    // Format RTC time: "RTC: 2025-12-26 14:30:45\n"
-    int len = snprintf(rtc_tx_buffer, sizeof(rtc_tx_buffer),
+    if (rtc_get_time(&current_time) == 0) {
+        // Format RTC time: "RTC: 2025-12-26 14:30:45\n"
+        len = snprintf(status_tx_buffer, sizeof(status_tx_buffer),
                        "RTC: %04u-%02u-%02u %02u:%02u:%02u\n",
                        current_time.year, current_time.month, current_time.day,
                        current_time.hour, current_time.minute, current_time.second);
+    }
 
-    if (len > 0 && len < (int)sizeof(rtc_tx_buffer)) {
-        rtc_tx_busy = 1;
-        HAL_UART_Transmit_DMA(&huart2, (uint8_t *)rtc_tx_buffer, len);
+    // Integer formatting: nano.specs printf has no %f support
+    bmp180_reading_t r;
+    if (bmp180_get(&r) == 0) {
+        int t = r.temperature_dc;
+        int alt_dm = (int)lroundf(r.altitude_m * 10.0f);
+        len += snprintf(status_tx_buffer + len, sizeof(status_tx_buffer) - len,
+                        "BMP180: T=%s%d.%d C P=%ld.%02ld hPa Alt=%s%d.%d m\n",
+                        t < 0 ? "-" : "", abs(t) / 10, abs(t) % 10,
+                        (long)(r.pressure_pa / 100), (long)(r.pressure_pa % 100),
+                        alt_dm < 0 ? "-" : "", abs(alt_dm) / 10, abs(alt_dm) % 10);
+    } else {
+        len += snprintf(status_tx_buffer + len, sizeof(status_tx_buffer) - len,
+                        "BMP180: no sensor\n");
+    }
+
+    if (len > 0 && len < (int)sizeof(status_tx_buffer)) {
+        status_tx_busy = 1;
+        HAL_UART_Transmit_DMA(&huart2, (uint8_t *)status_tx_buffer, len);
     }
 }
 
@@ -618,7 +673,7 @@ void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
 {
     if (huart->Instance == USART2) {
         echo_busy = 0;      // Ready for next echo
-        rtc_tx_busy = 0;    // Ready for next RTC transmission
+        status_tx_busy = 0; // Ready for next status transmission
     }
 }
 
@@ -629,7 +684,7 @@ void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)
         start_uart_rx();
     } else if (huart->Instance == USART2) {
         echo_busy = 0;      // Clear busy flag on error
-        rtc_tx_busy = 0;    // Clear RTC busy flag on error
+        status_tx_busy = 0; // Clear status busy flag on error
     }
 }
 

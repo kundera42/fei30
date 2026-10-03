@@ -40,11 +40,14 @@ set(HAL_SOURCES
     ${HAL_DRIVER_DIR}/Src/stm32l4xx_hal_dma_ex.c
     ${HAL_DRIVER_DIR}/Src/stm32l4xx_hal_rtc.c
     ${HAL_DRIVER_DIR}/Src/stm32l4xx_hal_rtc_ex.c
+    ${HAL_DRIVER_DIR}/Src/stm32l4xx_hal_i2c.c
+    ${HAL_DRIVER_DIR}/Src/stm32l4xx_hal_i2c_ex.c
 )
 
 set(PROJECT_SOURCES
     src/main.c
     src/rtc_manager.c
+    src/bmp180.c
     src/stm32l4xx_it.c
     src/system_stm32l4xx.c
     startup/startup_stm32l432xx.s
